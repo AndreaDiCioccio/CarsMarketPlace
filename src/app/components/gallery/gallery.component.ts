@@ -12,7 +12,7 @@ import { Car } from 'src/app/interfaces';
 export class GalleryComponent implements OnInit{
 
     @Input() allCars:BehaviorSubject<Car[]>
-    @Input() brands:BehaviorSubject<BrandCB[]> = new BehaviorSubject<BrandCB[]>(null)
+    @Input() brands:BehaviorSubject<BrandCB[]>
     @Input() types:BehaviorSubject<TypeCB[]>
 
     filteredCars:BehaviorSubject<Car[]> = new BehaviorSubject<Car[]>(null)
