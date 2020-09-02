@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { users } from '../mockData'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { User } from '../interfaces'
-import * as moment from 'moment'
+import * from 'moment'
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
