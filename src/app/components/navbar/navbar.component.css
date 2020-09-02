@@ -1,0 +1,80 @@
+:root{
+    --first-color: rgb(84, 177, 206);
+}
+
+button{
+    cursor: pointer;
+}
+.navbar{
+    height: 27px;
+}
+.nav-button{
+    background-color: white;
+    border: 0;
+    border-radius: 0;
+    margin: 3px 7px 3px 7px;
+}
+
+.nav-button:hover{
+    background-color: var(--first-color, rgb(84, 177, 206));
+    color: white;
+}
+
+.login-interface, .user-interface{
+    float: right;
+}
+
+.drop-down-login, .drop-down-user{
+    display:none;
+    background-color: white;
+    border: 1px solid lightgrey;
+    padding: 5px;
+}
+
+.login-button:hover .drop-down-login{
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 30px;
+}
+
+.user-button:hover .drop-down-user{
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 30px;
+}
+
+.input-text{
+    border-radius: 0;
+    border: 1px solid lightgrey;
+}
+
+.invalid-input-text{
+    border: 1px solid red;
+}
+
+.input-text, .interface-button{
+    margin-top: 5px;
+}
+
+.interface-button{
+    background-color: white;
+    color: black;
+    border: 0;
+    border-radius: 0;
+}
+
+.close-button{
+    display: none;
+}
+
+@media screen and (max-width:1024px){
+    .close-button{
+        display: block;
+        color: lightgrey;
+        background-color: white;
+        border: 0;
+        border-radius: 0;
+    }
+}

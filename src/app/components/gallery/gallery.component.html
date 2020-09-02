@@ -1,0 +1,34 @@
+<div class="conteiner">
+
+    <div class="left-conteiner">
+        <div class="filter-box-brand">
+            <div class="filterLabel"><b>Brand</b></div>
+            <label>
+                <input type="checkbox" id="allBrands" name="allBrands" value="all" 
+                [(ngModel)]="checkboxBrandAll" (change)="checkboxChange($event)"> all
+            </label>
+            <div class="checkboxList" *ngFor="let brand of (brands | async)">
+                <label>
+                    <input type="checkbox" id="{{brand.name}}" name="otherBrands" value="{{brand.name}}"
+                    [(ngModel)]="brand.checked" (change)="checkboxChange($event)"> {{brand.name}}
+                </label>
+                <label class="labelCount"> ({{brand.count}})</label>
+            </div>
+        </div>
+        <br>
+        <div class="filter-box-type">
+            <div class="filterLabel"><b>Type</b></div>
+            <label><input type="checkbox" id="allType" name="allTypes" value="all" [(ngModel)]="checkboxTypeAll" (change)="checkboxChange($event)"> all</label>
+            <div class="checkboxList" *ngFor="let type of (types | async)">
+                <label><input type="checkbox" [(ngModel)]="type.checked" id="{{type.name}}" name="otherTypes" value="{{type.name}}" (change)="checkboxChange($event)"> {{type.name}}</label><label class="labelCount"> ({{type.count}})</label>
+            </div>
+        </div>
+    </div>
+    
+    <div class="central-conteiner">
+        <div class="gallery" >
+            <app-car-card-gallery *ngFor="let car of (filteredCars | async)" [car]="car"></app-car-card-gallery>
+        </div>
+    </div>
+
+</div>

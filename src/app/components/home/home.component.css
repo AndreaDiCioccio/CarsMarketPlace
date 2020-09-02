@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+*{
+    font-family: 'Poppins';
+}
+
+.phrase{
+    position: absolute;
+    margin: auto;
+    background-color: rgb(84, 177, 206);
+    width: 300px;
+    left: 25%;
+    top: 50%;
+    padding: 5px;
+    opacity: 0;
+}
+
+@media only screen and (max-width:450px){
+
+    .phrase{
+        left:10%;
+    }
+
+}

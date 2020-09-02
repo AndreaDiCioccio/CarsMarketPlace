@@ -1,0 +1,42 @@
+<div class="navbar">
+    <a routerLink=''>
+        <button class="nav-button">Home</button>
+    </a>
+    <a routerLink='gallery'>
+        <button class="nav-button">Gallery</button>
+    </a>
+    <div class="login-interface login-button" *ngIf="!authService.currentUserValue || !isLoggedIn ; else user" >
+        <button class="nav-button login-button" (click)="showLoginInterface()">Login</button>
+        <div class="drop-down-login" id="drop-down-login">
+            <form [formGroup]="formLogin">
+                <div>
+                    <input type="text" 
+                        placeholder="username" 
+                        formControlName="username"
+                        class="input-text"
+                        [ngClass]="{ 'invalid-input-text': submitted && f.username.errors }">
+                </div>
+                <div>
+                    <input type="password" 
+                            placeholder="password" 
+                            formControlName="password"
+                            class="input-text"
+                            [ngClass]="{ 'invalid-input-text': submitted && f.password.errors }">
+                </div>
+                <button class="interface-button" (click)="login()">Login</button>
+                <button class="close-button" (click)="closeLoginInterface()">Close</button>
+            </form>
+        </div>
+    </div>
+    <ng-template #user>
+        <div class="user-interface user-button">
+            <button class="nav-button user-button" (click)="showUserInterface()">{{authService.currentUserValue.username}}</button>
+            <div class="drop-down-user" id="drop-down-user">
+                <div><button class="interface-button">Profile</button></div>
+                <div><button class="interface-button">Observed Cars</button></div>
+                <button class="interface-button" (click)="logout()">Logout</button>
+                <button class="close-button" (click)="closeUserInterface()">Close</button>
+            </div>
+        </div>
+    </ng-template>
+</div>

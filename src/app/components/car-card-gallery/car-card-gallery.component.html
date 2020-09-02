@@ -1,0 +1,15 @@
+<div class=card>
+    <a routerLink="/gallery/details/{{car.id}}">
+        <img class="image" src="{{carsImagesUrl}}{{car.image1}}">
+    </a>
+    <div class="conteiner-description">
+        <p class="descriprion-brand-model"><b>{{car.brand}} {{car.model}}</b></p>
+        <div *ngIf="(car.discount != 0) else normalPrice">
+            <div class="description-noprice">{{car?.price | currency:'EUR'}}</div>
+            <div class="description-price">{{car?.price - (car.price /100 * car.discount) | currency:'EUR'}}</div>
+        </div>
+        <ng-template #normalPrice>
+            <div class="description-price">{{car?.price | currency:'EUR'}}</div>
+        </ng-template> 
+    </div>
+</div>
