@@ -6,17 +6,52 @@
 
 .conteiner{
     display: flex;
-	justify-content: flex-start;
+    justify-content: flex-start;
 }
-.left-conteiner{
+
+.icon-button{
+    display:none;
+}
+
+#left-conteiner{
+    display: block;
+    position: static;
     max-width: 150px;
 	min-width: 150px;
     flex-basis: 150px;
+    background-color: white;
+}
+
+.hide-button{
+    display: none;
 }
 
 .gallery{
     display: -webkit-flex;
 	display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-flow: row wrap;
+}
+
+@media screen and (max-width: 1050px){
+    
+    .icon-button{
+        display: block;
+        color: lightgrey;
+        background-color: white;
+        border: 0;
+        border-radius: 0;
+    }
+
+    #left-conteiner{
+        display: none;
+    }
+
+    .hide-button{
+        display: block;
+        color: lightgrey;
+        background-color: white;
+        border: 0;
+        border-radius: 0;
+    }
 }

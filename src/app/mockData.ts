@@ -1,3 +1,19 @@
+export let brands = [
+    {id:0, name:'AUDI', checked:false, count:4},
+    {id:1, name:'BMW', checked:false, count:7},
+    {id:2, name:'FERRARI', checked:false, count:4},
+    {id:3, name:'FIAT', checked:false, count:5},
+    {id:4, name:'MASERATI', checked:false, count:5}
+]
+
+export let types = [
+    {id:0, name:'Berlina', checked:false, count:9},
+    {id:1, name:'CityCar', checked:false, count:2},
+    {id:2, name:'Jeep', checked:false, count:5},
+    {id:3, name:'Sportiva', checked:false, count:8},
+    {id:4, name:'SUV', checked:false, count:1}
+]
+
 export var cars = [
     {
         "id": 0,
@@ -626,7 +642,7 @@ export var usersAndMore = [
                 "observedByUserId": 0
             }
         ],
-        "rating": [
+        "ratings": [
             3,
             5,
             3,
@@ -874,7 +890,7 @@ export var usersAndMore = [
                 "observedByUserId": 1
             }
         ],
-        "rating": [
+        "ratings": [
             1,
             5,
             2,
@@ -1106,7 +1122,7 @@ export var usersAndMore = [
                 "observedByUserId": 2
             }
         ],
-        "rating": [
+        "ratings": [
             2,
             2,
             3,
@@ -1322,7 +1338,7 @@ export var usersAndMore = [
                 "observedByUserId": 3
             }
         ],
-        "rating": [
+        "ratings": [
             5,
             4,
             5,
@@ -1611,7 +1627,7 @@ export var usersAndMore = [
                 "observedByUserId": 4
             }
         ],
-        "rating": [
+        "ratings": [
             5,
             3,
             2,

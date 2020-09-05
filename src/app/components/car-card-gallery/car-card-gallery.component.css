@@ -11,3 +11,12 @@
     width: 100%;
     height: auto;
 }
+
+.description-price{
+    color: rgb(84, 177, 206);
+}
+
+.description-noprice{
+    color: rgb(84, 177, 206);
+    text-decoration: line-through;
+}

@@ -1,0 +1,3 @@
+<p>{{user.username}}</p>
+<div class="rating-star" *ngFor="let star of ratingArray"><img src="{{star}}" alt=""></div>
+<div class="rating-values">{{user.rating?.value | number:'1.1-1'}} ({{user.rating?.count}})</div>

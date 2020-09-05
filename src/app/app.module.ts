@@ -1,5 +1,3 @@
-import { TypesModule } from './store/types/types.module';
-import { BrandsModule } from './store/brands/brands.module';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,14 +9,20 @@ import { HomeComponent } from './components/home/home.component';
 
 import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { EffectsModule } from '@ngrx/effects'
 
+import { EffectsModule } from '@ngrx/effects'
 import { CarsModule } from './store/cars/cars.module';
+import { TypesModule } from './store/types/types.module';
+import { BrandsModule } from './store/brands/brands.module';
+import { UsersRatingsModule } from './store/user-ratings/users-ratings.module'
+
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { ConteinerGalleryComponent } from './conteiners/conteiner-gallery/conteiner-gallery.component';
 import { CarCardGalleryComponent } from './components/car-card-gallery/car-card-gallery.component';
 import { NavbarComponent } from './components/navbar/navbar.component'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ShowUserRatingComponent } from './components/show-user-rating/show-user-rating.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
     declarations: [
@@ -27,7 +31,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
         GalleryComponent,
         ConteinerGalleryComponent,
         CarCardGalleryComponent,
-        NavbarComponent
+        NavbarComponent,
+        ShowUserRatingComponent
     ],
     imports: [
         BrowserModule,
@@ -41,7 +46,10 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
         CarsModule,
         BrandsModule,
-        TypesModule
+        TypesModule,
+        UsersRatingsModule,
+        
+        FontAwesomeModule
 
     ],
     providers: [],

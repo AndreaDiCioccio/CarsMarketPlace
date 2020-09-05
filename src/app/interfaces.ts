@@ -16,10 +16,14 @@ export interface Car{
 export interface User{
     id:number
     username:string
-    password:string
-    firstName:string
-    lastName:string
-    email:string
+    password?:string
+    firstName?:string
+    lastName?:string
+    email?:string
+    rating?: {
+        value:number
+        count:number
+    }
 }
 
 export interface BrandCB {
@@ -30,3 +34,8 @@ export interface BrandCB {
 }
 
 export interface TypeCB extends BrandCB {}
+
+export interface UserRatings {
+    userId:number
+    ratings:number[]
+}

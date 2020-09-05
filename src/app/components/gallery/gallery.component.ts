@@ -1,7 +1,7 @@
-import { BrandCB, TypeCB } from './../../interfaces';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BrandCB, TypeCB, UserRatings } from './../../interfaces';
 import { Component, Input, OnInit } from '@angular/core';
 import { Car } from 'src/app/interfaces';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-gallery',
@@ -11,22 +11,21 @@ import { Car } from 'src/app/interfaces';
 
 export class GalleryComponent implements OnInit{
 
-    @Input() allCars:BehaviorSubject<Car[]>
-    @Input() brands:BehaviorSubject<BrandCB[]>
-    @Input() types:BehaviorSubject<TypeCB[]>
+    @Input() allCars:Car[]
+    @Input() brands:BrandCB[]
+    @Input() types:TypeCB[]
+    @Input() usersRatings:UserRatings[]
 
-    filteredCars:BehaviorSubject<Car[]> = new BehaviorSubject<Car[]>(null)
+    filteredCars:Car[] = []
 
     checkboxBrandAll:boolean = true
     checkboxTypeAll:boolean = true
 
+    faBars = faBars
+
     ngOnInit():void{
         this.filteredCars = this.allCars
-        setTimeout(() => {
-            console.log('onInit brands:', this.brands.value)
-        }, 5000);
-        
-        //this.filterCars()
+        this.filterCars()
     }
  
     checkboxChange(event):void{
@@ -34,16 +33,14 @@ export class GalleryComponent implements OnInit{
         let name = event.target.name;
         let checked = event.target.checked;
         
-        console.log('brands', this.brands.value)
-
         //BRANDS
-        let brands:BrandCB[] = this.brands.value;
+        let brands:BrandCB[] = [...this.brands]
 
         if(name =='allBrands'){
         
             brands.map(brand => brand.checked = false);
 
-            this.brands.next(brands);
+            this.brands = brands
 
         } else if(name == 'otherBrands'){
 
@@ -61,18 +58,18 @@ export class GalleryComponent implements OnInit{
 
             }
 
-            this.brands.next(brands);
+            this.brands = brands
         
         }
 
         // TYPES
-        let types:TypeCB[] = this.types.value;
+        let types:TypeCB[] = [...this.types]
 
         if(name =='allTypes'){
     
             types.map(type => type.checked = false)
         
-            this.types.next(types);
+            this.types = types
 
         } else if(name == 'otherTypes'){
 
@@ -90,7 +87,7 @@ export class GalleryComponent implements OnInit{
 
             }
 
-            this.types.next(types);
+            this.types = types
         
         }
 
@@ -100,9 +97,9 @@ export class GalleryComponent implements OnInit{
 
     filterCars():void{
         
-        let allCars = [...this.allCars.value];
-        let brands = [...this.brands.value];
-        let types = [...this.types.value];
+        let allCars = [...this.allCars];
+        let brands = [...this.brands];
+        let types = [...this.types];
         
         const checkedBrands = brands.filter(brand => brand.checked);
         const checkedTypes = types.filter(type => type.checked);
@@ -127,7 +124,7 @@ export class GalleryComponent implements OnInit{
         
         }
 
-        this.filteredCars.next(filteredCars);
+        this.filteredCars = [...filteredCars]
         
         this.countBrands(filteredCars);
         this.countTypes(filteredCars);
@@ -137,7 +134,7 @@ export class GalleryComponent implements OnInit{
     // conta le occorrenze di ogni brand, ad esempio ferrari(2)
     countBrands(cars:Car[]):void{
         
-        let brands = [...this.brands.value];
+        let brands = [...this.brands];
         
         brands.map( brand => {
             
@@ -151,14 +148,14 @@ export class GalleryComponent implements OnInit{
         
         })
         
-        this.brands.next(brands);
+        this.brands = brands
     
     }
 
     // conta le occorrenze di ogni type, ad esempio jeep(2)
     countTypes(cars:Car[]):void{
 
-        let types = [...this.types.value];
+        let types = [...this.types];
     
         types.map( type => {
             let count = 0;
@@ -168,8 +165,23 @@ export class GalleryComponent implements OnInit{
             type.count = count;
         })
 
-        this.types.next(types);
+        this.types = types
     
+    }
+
+    showLeftConteiner():void{
+        console.log('show')
+        let element = document.getElementById('left-conteiner')
+        element.style.display = 'block'
+        element.style.position = 'absolute'
+        element.style.top = '145px'
+        element.style.left = '10px'
+    }
+
+    hideLeftContenier():void{
+        console.log('hide')
+        let element = document.getElementById('left-conteiner')
+        element.style.display = 'none'
     }
 
 }

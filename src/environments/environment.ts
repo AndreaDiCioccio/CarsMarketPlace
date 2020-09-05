@@ -16,3 +16,4 @@ export const environment = {
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
 
 export const carsImagesUrl:string = 'https://raw.githubusercontent.com/AndreaDiCioccio/Angular-Cars-Market-Place/master/src/assets/CarsImages/'
+export const imagesUrl:string = 'https://raw.githubusercontent.com/AndreaDiCioccio/Angular-Cars-Market-Place/master/src/assets/images/'

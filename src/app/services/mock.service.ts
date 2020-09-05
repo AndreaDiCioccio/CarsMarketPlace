@@ -1,8 +1,8 @@
-import { TypeCB } from './../interfaces';
-import { cars } from '../mockData';
+import { TypeCB, UserRatings } from './../interfaces';
+import { cars, brands, types, usersAndMore } from '../mockData';
 import { Car, BrandCB } from '../interfaces'
 import { Injectable } from '@angular/core';
-import { of, Observable } from 'rxjs';
+import { of, Observable, from } from 'rxjs';
 import { mergeMap, map, distinct, toArray, tap } from 'rxjs/operators';
 
 @Injectable({
@@ -16,23 +16,18 @@ export class MockService {
     }
 
     getBrands():Observable<BrandCB[]>{
-        return of(cars).pipe(
-            mergeMap((cars:Car[]) => cars),
-            map( (car:Car) => car.brand),
-            distinct(),
-            map( brand => ({id:Math.trunc(Math.random() * 1000), name:brand, checked:false, count:0}) ),
-            toArray()        
-        )
+        return of(brands)
     }
 
     getTypes():Observable<TypeCB[]>{
-        return of(cars).pipe(
-            mergeMap((cars:Car[]) => cars),
-            map( (car:Car) => car.type),
-            distinct(),
-            map( type => ({id:Math.trunc(Math.random() * 1000), name:type, checked:false, count:0}) ),
-            toArray()        
-        )
+        return of(types)
     }
 
+    getUsersRatings():Observable<UserRatings[]>{
+        return of(usersAndMore).pipe(
+            map( (users:any) => {
+                return users.map( user => ({userId:user.id, ratings:user.ratings}))
+            })
+        )
+    }
 }
