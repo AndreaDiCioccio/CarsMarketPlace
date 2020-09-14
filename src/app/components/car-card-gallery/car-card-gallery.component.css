@@ -14,9 +14,17 @@
 
 .description-price{
     color: rgb(84, 177, 206);
+    font-size: large;
 }
 
 .description-noprice{
     color: rgb(84, 177, 206);
     text-decoration: line-through;
+}
+
+.observe-button{
+    background-color: rgb(84, 177, 206);
+    color: white;
+    border: 0;
+    border-radius: 0;
 }

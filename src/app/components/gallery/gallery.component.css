@@ -13,13 +13,27 @@
     display:none;
 }
 
-#left-conteiner{
+.show-normal-left-conteiner{
     display: block;
     position: static;
     max-width: 150px;
 	min-width: 150px;
     flex-basis: 150px;
     background-color: white;
+}
+
+.show-mobile-left-conteiner{
+    display: block;
+    position: absolute;
+    max-width: 150px;
+    min-width: 150px;
+    top: 145px;
+    left: 10px;
+    background-color: white;
+}
+
+.hide-left-conteiner{
+    display: none;
 }
 
 .hide-button{
@@ -43,15 +57,15 @@
         border-radius: 0;
     }
 
-    #left-conteiner{
-        display: none;
-    }
-
     .hide-button{
         display: block;
         color: lightgrey;
         background-color: white;
         border: 0;
         border-radius: 0;
+    }
+
+    .recent-seen{
+        display: none;
     }
 }

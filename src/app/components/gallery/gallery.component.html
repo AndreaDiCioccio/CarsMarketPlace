@@ -1,10 +1,10 @@
-<button class="icon-button" (click)="showLeftConteiner()">
+<button class="icon-button" (click)="showMobileLeftConteiner()">
     <fa-icon class="menu-icon" [icon]="faBars"></fa-icon>
 </button>
 <div class="conteiner">
 
 
-    <div class="left-conteiner" id="left-conteiner">
+    <div class="left-conteiner" [ngClass]="leftConteinerClass" id="left-conteiner">
         <div class="filter-box-brand">
             <div class="filterLabel"><b>Brand</b></div>
             <label>
@@ -28,11 +28,16 @@
             </div>
         </div>
         <button class="hide-button" (click)="hideLeftContenier()">close</button>
+        <app-recent-seen-cars class="recent-seen" [recentSeenCars]="recentSeenCars"></app-recent-seen-cars>
     </div>
     
     <div class="central-conteiner">
         <div class="gallery" >
-            <app-car-card-gallery *ngFor="let car of filteredCars" [car]="car" [parent]="'gallery'" [usersRatings]="usersRatings"></app-car-card-gallery>
+            <app-car-card-gallery *ngFor="let car of filteredCars" 
+            [car]="car" [parent]="'gallery'" 
+            [usersRatings]="usersRatings"
+            (setObservedCarAction)="onSetObservedCar($event)"
+            (setNotObservedCarAction)="onSetNotObservedCar($event)"></app-car-card-gallery>
         </div>
     </div>
 

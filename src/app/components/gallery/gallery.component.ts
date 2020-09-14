@@ -1,5 +1,7 @@
-import { BrandCB, TypeCB, UserRatings } from './../../interfaces';
-import { Component, Input, OnInit } from '@angular/core';
+import { observedCars } from './../../mockData';
+import { AuthenticationService } from './../../services/authentication.service';
+import { BrandCB, TypeCB, User, ObservedCar, UserRating } from './../../interfaces';
+import { Component, Input, OnInit, Output, EventEmitter, IterableDiffers, IterableDiffer, OnChanges, SimpleChanges, DoCheck } from '@angular/core';
 import { Car } from 'src/app/interfaces';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
@@ -9,25 +11,53 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
     styleUrls: ['./gallery.component.css']
 })
 
-export class GalleryComponent implements OnInit{
+export class GalleryComponent implements OnInit, DoCheck{
 
     @Input() allCars:Car[]
     @Input() brands:BrandCB[]
     @Input() types:TypeCB[]
-    @Input() usersRatings:UserRatings[]
+    @Input() usersRatings:UserRating[]
+    @Input() recentSeenCars:Car[]
+    @Input() observedCars:ObservedCar[]
+
+    @Output() setObservedCarAction = new EventEmitter<any>()
+    @Output() setNotObservedCarAction = new EventEmitter<any>()
 
     filteredCars:Car[] = []
+
+    user:User
+
+    iterableDiffer:IterableDiffer<any>
 
     checkboxBrandAll:boolean = true
     checkboxTypeAll:boolean = true
 
+    leftConteinerClass:string
+
     faBars = faBars
+
+    constructor( private authService:AuthenticationService, private iterableDiffers: IterableDiffers){
+        this.iterableDiffer = iterableDiffers.find([]).create(null);
+    }
+
+    ngDoCheck(): void {
+        let changes = this.iterableDiffer.diff(this.observedCars);
+        if (changes) {
+            this.user ? this.setObservedCars() : null
+        }
+    }
 
     ngOnInit():void{
         this.filteredCars = this.allCars
+        this.user = this.authService.currentUserValue
+        this.user ? this.setObservedCars() : null
         this.filterCars()
+
+        this.showNormalLeftConteiner()
+        window.addEventListener('resize', () => this.showNormalLeftConteiner())
+
     }
- 
+
     checkboxChange(event):void{
         
         let name = event.target.name;
@@ -93,6 +123,21 @@ export class GalleryComponent implements OnInit{
 
         this.filterCars();
 
+    }
+
+    setObservedCars():void{
+        let allCars:Car[] = [...this.allCars]
+        let observedCars:ObservedCar[] = [...this.observedCars]
+
+        //observedCars = observedCars.filter( obs => obs.userId == this.user.id)
+
+        allCars.map( car => {
+            
+            observedCars.some( obs => obs.carId == car.id) ? car.observed = true : car.observed = false
+
+        })
+
+        this.allCars = [...allCars]
     }
 
     filterCars():void{
@@ -169,19 +214,28 @@ export class GalleryComponent implements OnInit{
     
     }
 
-    showLeftConteiner():void{
+    showMobileLeftConteiner():void{
         console.log('show')
-        let element = document.getElementById('left-conteiner')
-        element.style.display = 'block'
-        element.style.position = 'absolute'
-        element.style.top = '145px'
-        element.style.left = '10px'
+        this.leftConteinerClass = 'show-mobile-left-conteiner'
+    }
+
+    showNormalLeftConteiner():void{
+        if(window.innerWidth >= 1051){
+            this.leftConteinerClass = 'show-normal-left-conteiner'
+        }else{
+            this.hideLeftContenier()
+        }
     }
 
     hideLeftContenier():void{
-        console.log('hide')
-        let element = document.getElementById('left-conteiner')
-        element.style.display = 'none'
+        this.leftConteinerClass = 'hide-left-conteiner'
     }
 
+    onSetObservedCar(carId:number):void{
+        this.setObservedCarAction.emit(carId)
+    }
+
+    onSetNotObservedCar(carId:number):void{
+        this.setNotObservedCarAction.emit(carId)
+    }
 }

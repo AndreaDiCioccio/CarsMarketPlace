@@ -6,12 +6,14 @@
         <p class="descriprion-brand-model"><b>{{car.brand}} {{car.model}}</b></p>
         <div class="description-prices" *ngIf="(car.discount != 0) else normalPrice">
             <div class="description-noprice">{{car?.price | currency:'EUR'}}</div>
-            <div class="description-price">{{car?.price - (car.price /100 * car.discount) | currency:'EUR'}}</div>
+            <div class="description-price">{{car?.price - (car.price / 100 * car.discount) | currency:'EUR'}}</div>
         </div>
         <ng-template #normalPrice>
-            <div class="description-price">{{car?.price | currency:'EUR'}}</div>
             <br>
+            <div class="description-price">{{car?.price | currency:'EUR'}}</div>
         </ng-template> 
-        <app-show-user-rating *ngIf="parent == 'gallery'" [user]="user"></app-show-user-rating>
+        <app-show-user-rating [rating]="rating" [username]="car.username"></app-show-user-rating>
+        <button class="observe-button" *ngIf="car?.observed == true" (click)="setNotObserved(car.id)">Observed</button>
+        <button class="observe-button" *ngIf="car?.observed == false" (click)="setObserved(car.id)">Observe</button>
     </div>
 </div>

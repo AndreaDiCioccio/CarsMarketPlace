@@ -1,8 +1,8 @@
-import { ratings } from './../../mockData';
-import { User, UserRatings } from './../../interfaces';
+import { AuthenticationService } from './../../services/authentication.service';
+import { User, UserRating, Rating } from './../../interfaces';
 import { carsImagesUrl } from '../../../environments/environment';
 import { Car } from '../../interfaces';
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter, IterableDiffers, IterableDiffer, DoCheck } from '@angular/core';
 
 @Component({
     selector: 'app-car-card-gallery',
@@ -12,33 +12,44 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 export class CarCardGalleryComponent implements OnInit{
 
     @Input() car:Car
-    @Input() usersRatings:UserRatings[]
+    @Input() usersRatings:UserRating[]
     @Input() parent:string
 
+    @Output() setObservedCarAction = new EventEmitter<any>()
+    @Output() setNotObservedCarAction = new EventEmitter<any>()
+
     carsImagesUrl = carsImagesUrl
-    user:User
+    rating:Rating
+    iterableDiffer:IterableDiffer<any>
+
+    constructor(public authService:AuthenticationService){ }
 
     ngOnInit():void{
-        this.user = this.selectUser(this.car)
-        this.user = this.addRatingToUser(this.usersRatings, this.user)
+        this.rating = this.addRating(this.usersRatings)
     }
 
     selectUser(car:Car):User{
         return ({id:car.userId, username:car.username})
     }
 
-    addRatingToUser(usersRatings:UserRatings[], user:User):User{
+    addRating(usersRatings:UserRating[]):Rating{
 
-        let userRatings:UserRatings[] = usersRatings.filter( ur => ur.userId == user.id)
-        let ratings:number[] = userRatings[0].ratings
-        let rating = ratings.reduce( (acc, cur) => acc + cur, 0)
-        let count = ratings.length
+        usersRatings = usersRatings.filter(userRating => userRating.userId == this.car.userId)
 
-        usersRatings.map( uRating => {
-            uRating.userId == user.id ? user.rating = {value:rating / count, count:count} : null
-        })
+        let ratings:UserRating[] = usersRatings
+        let rating:Rating = {value:null, count:null}
+        rating.count = ratings.length
+        rating.value = ratings.reduce( (acc, cur) => acc + cur.value, 0) / rating.count
+         
+        return rating
+    }
 
-        return user
+    setObserved(carId:number):void{
+        this.setObservedCarAction.emit(carId)
+    }
+
+    setNotObserved(carId:number):void{
+        this.setNotObservedCarAction.emit(carId)
     }
 
 }

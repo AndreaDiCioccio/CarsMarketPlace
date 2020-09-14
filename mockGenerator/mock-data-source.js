@@ -1,4 +1,4 @@
-export let brands = [
+let brands = [
     {id:0, name:'AUDI', checked:false, count:4},
     {id:1, name:'BMW', checked:false, count:7},
     {id:2, name:'FERRARI', checked:false, count:4},
@@ -6,7 +6,7 @@ export let brands = [
     {id:4, name:'MASERATI', checked:false, count:5}
 ]
 
-export let types = [
+let types = [
     {id:0, name:'Berlina', checked:false, count:9},
     {id:1, name:'CityCar', checked:false, count:2},
     {id:2, name:'Jeep', checked:false, count:5},
@@ -14,7 +14,7 @@ export let types = [
     {id:4, name:'SUV', checked:false, count:1}
 ]
 
-export let cars = [
+var cars = [
     {
         "id": 0,
         "brand": "MASERATI",
@@ -342,7 +342,7 @@ export let cars = [
     }
 ]
 
-export let users = [
+var users = [
     {
         "id": 0,
         "firstName": "Stanford",
@@ -390,7 +390,7 @@ export let users = [
     }
 ]
 
-export let observedCars = [
+let observedCars = [
     {
       id: 0,
       userId: 0,
@@ -518,7 +518,7 @@ export let observedCars = [
     }
   ]
 
-  export let usersRatings = [
+  let usersRatings = [
     {
       id: 0,
       userId: 0,
@@ -537,12 +537,12 @@ export let observedCars = [
     {
       id: 3,
       userId: 0,
-      value: 1
+      value: 0
     },
     {
       id: 4,
       userId: 0,
-      value: 1
+      value: 0
     },
     {
       id: 5,
@@ -557,7 +557,7 @@ export let observedCars = [
     {
       id: 7,
       userId: 0,
-      value: 1
+      value: 0
     },
     {
       id: 8,
@@ -637,12 +637,12 @@ export let observedCars = [
     {
       id: 23,
       userId: 2,
-      value: 1
+      value: 0
     },
     {
       id: 24,
       userId: 2,
-      value: 1
+      value: 0
     },
     {
       id: 25,
@@ -677,7 +677,7 @@ export let observedCars = [
     {
       id: 31,
       userId: 3,
-      value: 1
+      value: 0
     },
     {
       id: 32,
@@ -687,7 +687,7 @@ export let observedCars = [
     {
       id: 33,
       userId: 3,
-      value: 1
+      value: 0
     },
     {
       id: 34,
@@ -717,12 +717,12 @@ export let observedCars = [
     {
       id: 39,
       userId: 3,
-      value: 1
+      value: 0
     },
     {
       id: 40,
       userId: 4,
-      value: 1
+      value: 0
     },
     {
       id: 41,
@@ -771,7 +771,7 @@ export let observedCars = [
     }
   ]
 
-  export let recentSeenCars = [
+  let recentCars = [
     {
       id: 0,
       brand: 'MASERATI',
@@ -1448,3 +1448,9 @@ export let observedCars = [
       entityId: 44
     }
   ]
+
+module.exports.brands = brands
+module.exports.types = types
+module.exports.cars = cars
+module.exports.users = users
+module.exports.recentCars = recentCars

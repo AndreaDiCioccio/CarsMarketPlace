@@ -1,5 +1,5 @@
 import { environment, imagesUrl } from './../../../environments/environment';
-import { User } from './../../interfaces';
+import { User, UserRating, Rating } from './../../interfaces';
 import { Component, Input, OnInit } from '@angular/core';
 
 
@@ -11,7 +11,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ShowUserRatingComponent implements OnInit{
 
-    @Input() user:User
+    @Input() rating:Rating = null
+    @Input() username:string
 
     yellowStar:string = imagesUrl + "yellow-star.jpg";
     midStar:string = imagesUrl + "mid-star.jpg";
@@ -29,7 +30,7 @@ export class ShowUserRatingComponent implements OnInit{
 
         let ratingArray:string[] = new Array;
 
-        if(this.user.rating.value == 0){
+        if(this.rating.value == 0){
 
             for(let k=0;k<=4;k++){
                 ratingArray[k] = this.greyStar;
@@ -39,8 +40,7 @@ export class ShowUserRatingComponent implements OnInit{
 
         }else{
 
-            let rating = this.user.rating.value
-            let count = this.user.rating.count
+            let rating = this.rating.value
             
             let trunc = Math.trunc(rating);
                     

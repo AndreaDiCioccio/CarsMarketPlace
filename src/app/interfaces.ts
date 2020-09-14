@@ -26,6 +26,17 @@ export interface User{
     }
 }
 
+export interface RecentSeenCar extends Car{
+    observedBy:number
+    entityId:number
+}
+
+export interface ObservedCar{
+    id:number
+    userId:number
+    carId:number
+}
+
 export interface BrandCB {
     id:number
     name:string
@@ -35,7 +46,13 @@ export interface BrandCB {
 
 export interface TypeCB extends BrandCB {}
 
-export interface UserRatings {
+export interface UserRating {
+    id:number
     userId:number
-    ratings:number[]
+    value:number
+}
+
+export interface Rating {
+    value:number
+    count:number
 }
