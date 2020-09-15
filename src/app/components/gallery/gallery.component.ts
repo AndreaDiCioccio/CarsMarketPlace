@@ -44,7 +44,6 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
 
     ngOnChanges(changes: SimpleChanges): void {
         console.log('changes', changes)
-        this.allCars = this.allCars
     }
 
     ngDoCheck(): void {

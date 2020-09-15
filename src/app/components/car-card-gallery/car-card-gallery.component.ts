@@ -31,9 +31,6 @@ export class CarCardGalleryComponent implements OnInit, OnChanges{
  
     ngOnInit():void{
         this.rating = this.addRating(this.usersRatings)
-        setTimeout(() => {
-            console.log('card car', this.car.observed)
-        }, 1000);
     }
 
 
