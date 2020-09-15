@@ -18,4 +18,12 @@ export class CarsEffects {
         )
     )
 
+    getCarsWithObserved$ = createEffect(() => 
+        this.actions$.pipe(
+            ofType(carsActions.setCarsWithObserved.type),
+            mergeMap( (cars:Car[]) => this.mockService.setCarsWithObserved(cars)),
+            map( (cars:Car[]) => carsActions.setCarsWithObservedSuccess({cars}))
+        )
+    )
+
 }

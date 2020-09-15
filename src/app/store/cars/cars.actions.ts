@@ -9,3 +9,13 @@ export const getAllCarsSuccess = createAction(
     '[Cars] Get All Cars Success',
     props<{cars:Car[]}>()
 )
+
+export const setCarsWithObserved = createAction(
+    '[Cars] Set Cars With Observed',
+    props<{cars:Car[]}>()
+)
+
+export const setCarsWithObservedSuccess = createAction(
+    '[Cars] Set Cars With Observed Success',
+    props<{cars:Car[]}>()
+)

@@ -17,7 +17,7 @@ import * as typeSelectors from '../../store/types/types.selectors'
 import * as userRatingsSelectors from '../../store/users-ratings/users-ratings.selectors'
 import * as userRecentSeenCarsSelectors from '../../store/recentSeenCars/recentSeenCars.selectors'
 import * as userObservedCarsSelectors from '../../store/observedCars/observedCars.selectors'
-import { Subscription, Subject } from 'rxjs';
+import { Subscription, Subject, Observable } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 
@@ -26,7 +26,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
     selector: 'app-conteiner-gallery',
     template:`
-        <app-gallery [allCars]="allCars" 
+        <app-gallery [allCars]="allCars$ | async" 
                     [brands]="brands" 
                     [types]="types" 
                     [usersRatings]="usersRatings" 
@@ -34,13 +34,14 @@ import { takeUntil } from 'rxjs/operators';
                     [observedCars]="observedCars"
                     
                     (setObservedCarAction)="onSetObservedCar($event)"
-                    (setNotObservedCarAction)="onSetNotObservedCar($event)">
+                    (setNotObservedCarAction)="onSetNotObservedCar($event)"
+                    (setObservedCarsAction)="onSetObservedCars($event)">
         </app-gallery>
     `
 })
 export class ConteinerGalleryComponent implements OnInit, OnDestroy {
 
-    allCars:Car[] 
+    allCars$:Observable<Car[]>
     brands:BrandCB[]
     types:TypeCB[]
     usersRatings:UserRating[]
@@ -67,7 +68,8 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
         this.authService.currentUserValue ? this.store.dispatch(recentSeenCarsActions.getRecentSeenCars()) : null
         this.authService.currentUserValue ? this.store.dispatch(observedCarsActions.getObservedCars()) : null
 
-        this.store.pipe(select(carsSelectors.getAllCars))
+        this.allCars$ = this.store.pipe(select(carsSelectors.getAllCars))
+            /* 
             .pipe(
                 takeUntil(this.unsubscripion)
             ).subscribe(
@@ -76,7 +78,7 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
                     this.allCars = JSON.parse(jsonCars)
                 }
             )
-
+ */
         
 
         this.store.pipe(select(brandsSelectors.getBrands))
@@ -146,6 +148,10 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
 
     onSetNotObservedCar(carId:number):void{
         this.store.dispatch(observedCarsActions.setNotObservedCar({carId}))
+    }
+
+    onSetObservedCars(cars:Car[]){
+        this.store.dispatch(carsActions.setCarsWithObserved({cars}))
     }
 
 }

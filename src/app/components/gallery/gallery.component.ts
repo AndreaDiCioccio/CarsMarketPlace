@@ -1,7 +1,7 @@
 import { observedCars } from './../../mockData';
 import { AuthenticationService } from './../../services/authentication.service';
 import { BrandCB, TypeCB, User, ObservedCar, UserRating } from './../../interfaces';
-import { Component, Input, OnInit, Output, EventEmitter, IterableDiffers, IterableDiffer, OnChanges, SimpleChanges, DoCheck } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, IterableDiffers, IterableDiffer, OnChanges, SimpleChanges, DoCheck, ChangeDetectorRef } from '@angular/core';
 import { Car } from 'src/app/interfaces';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
@@ -11,7 +11,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
     styleUrls: ['./gallery.component.css']
 })
 
-export class GalleryComponent implements OnInit, DoCheck{
+export class GalleryComponent implements OnInit, DoCheck, OnChanges{
 
     @Input() allCars:Car[]
     @Input() brands:BrandCB[]
@@ -22,6 +22,7 @@ export class GalleryComponent implements OnInit, DoCheck{
 
     @Output() setObservedCarAction = new EventEmitter<any>()
     @Output() setNotObservedCarAction = new EventEmitter<any>()
+    @Output() setObservedCarsAction = new EventEmitter<any>()
 
     filteredCars:Car[] = []
 
@@ -36,16 +37,26 @@ export class GalleryComponent implements OnInit, DoCheck{
 
     faBars = faBars
 
-    constructor( private authService:AuthenticationService, private iterableDiffers: IterableDiffers){
+    constructor( private authService:AuthenticationService, private iterableDiffers: IterableDiffers, 
+                private changeDetectionRef:ChangeDetectorRef){
         this.iterableDiffer = iterableDiffers.find([]).create(null);
     }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        console.log('changes', changes)
+        this.allCars = this.allCars
+    }
+
     ngDoCheck(): void {
+        // usato a causa del click sui pulsanti observe / observed
         let changes = this.iterableDiffer.diff(this.observedCars);
         if (changes) {
             this.user ? this.setObservedCars() : null
         }
+
     }
+
+    
 
     ngOnInit():void{
         this.filteredCars = this.allCars
@@ -126,18 +137,23 @@ export class GalleryComponent implements OnInit, DoCheck{
     }
 
     setObservedCars():void{
-        let allCars:Car[] = [...this.allCars]
+        //let allCars:Car[] = [...this.allCars]
+        let allCars:Car[] = JSON.parse(JSON.stringify(this.allCars))
         let observedCars:ObservedCar[] = [...this.observedCars]
 
-        //observedCars = observedCars.filter( obs => obs.userId == this.user.id)
-
         allCars.map( car => {
-            
+
             observedCars.some( obs => obs.carId == car.id) ? car.observed = true : car.observed = false
 
         })
 
-        this.allCars = [...allCars]
+        this.setObservedCarsAction.emit(allCars)
+
+        setTimeout(() => {
+            //console.log('gallery allCars', this.allCars)
+        }, 1000);
+        
+        //this.allCars = [...allCars]
     }
 
     filterCars():void{

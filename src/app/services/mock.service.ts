@@ -16,7 +16,15 @@ export class MockService {
     constructor(private authService: AuthenticationService){}
 
     getAllCars():Observable<Car[]>{
-        return of(cars)
+        let jsonCars = JSON.parse(JSON.stringify(cars))
+        return of(jsonCars)
+    }
+
+    setCarsWithObserved(carsWithObserved:any):Observable<Car[]>{
+        cars.splice(0, cars.length)
+        carsWithObserved.cars.forEach( car => cars.push(car))
+        let jsonCars = JSON.parse(JSON.stringify(cars))
+        return of(jsonCars)
     }
 
     getBrands():Observable<BrandCB[]>{

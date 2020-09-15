@@ -2,14 +2,15 @@ import { AuthenticationService } from './../../services/authentication.service';
 import { User, UserRating, Rating } from './../../interfaces';
 import { carsImagesUrl } from '../../../environments/environment';
 import { Car } from '../../interfaces';
-import { Component, OnInit, Input, OnChanges, Output, EventEmitter, IterableDiffers, IterableDiffer, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter, IterableDiffers, IterableDiffer, DoCheck, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import { timeout } from 'rxjs/operators';
 
 @Component({
     selector: 'app-car-card-gallery',
     templateUrl: './car-card-gallery.component.html',
     styleUrls: ['./car-card-gallery.component.css']
 })
-export class CarCardGalleryComponent implements OnInit{
+export class CarCardGalleryComponent implements OnInit, OnChanges{
 
     @Input() car:Car
     @Input() usersRatings:UserRating[]
@@ -24,9 +25,17 @@ export class CarCardGalleryComponent implements OnInit{
 
     constructor(public authService:AuthenticationService){ }
 
+    ngOnChanges(changes: SimpleChanges): void {
+        //console.log('card changes', changes)
+    }
+ 
     ngOnInit():void{
         this.rating = this.addRating(this.usersRatings)
+        setTimeout(() => {
+            console.log('card car', this.car.observed)
+        }, 1000);
     }
+
 
     selectUser(car:Car):User{
         return ({id:car.userId, username:car.username})
