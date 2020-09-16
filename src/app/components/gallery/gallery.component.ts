@@ -23,8 +23,12 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
     @Output() setObservedCarAction = new EventEmitter<any>()
     @Output() setNotObservedCarAction = new EventEmitter<any>()
     @Output() setObservedCarsAction = new EventEmitter<any>()
+    @Output() setBrandCount = new EventEmitter<any>()
+    @Output() setTypeCount = new EventEmitter<any>()
 
     filteredCars:Car[] = []
+    brandsCB:BrandCB[] = []
+    typesCB:TypeCB[] = []
 
     user:User
 
@@ -37,13 +41,12 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
 
     faBars = faBars
 
-    constructor( private authService:AuthenticationService, private iterableDiffers: IterableDiffers, 
-                private changeDetectionRef:ChangeDetectorRef){
+    constructor( private authService:AuthenticationService, private iterableDiffers: IterableDiffers){
         this.iterableDiffer = iterableDiffers.find([]).create(null);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log('changes', changes)
+        changes.allCars ? this.filterCars() : null
     }
 
     ngDoCheck(): void {
@@ -58,14 +61,23 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
     
 
     ngOnInit():void{
-        this.filteredCars = this.allCars
+        //this.filteredCars = this.allCars
         this.user = this.authService.currentUserValue
         this.user ? this.setObservedCars() : null
         this.filterCars()
+        this.setBrands()
+        this.setTypes()
 
         this.showNormalLeftConteiner()
         window.addEventListener('resize', () => this.showNormalLeftConteiner())
+    }
 
+    setBrands():void{
+        this.brandsCB = JSON.parse(JSON.stringify(this.brands))
+    }
+
+    setTypes():void{
+        this.typesCB = JSON.parse(JSON.stringify(this.types))
     }
 
     checkboxChange(event):void{
@@ -74,7 +86,7 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
         let checked = event.target.checked;
         
         //BRANDS
-        let brands:BrandCB[] = [...this.brands]
+        let brands:BrandCB[] = [...this.brandsCB]
 
         if(name =='allBrands'){
         
@@ -98,12 +110,12 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
 
             }
 
-            this.brands = brands
+            this.brandsCB = brands
         
         }
 
         // TYPES
-        let types:TypeCB[] = [...this.types]
+        let types:TypeCB[] = [...this.typesCB]
 
         if(name =='allTypes'){
     
@@ -136,7 +148,6 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
     }
 
     setObservedCars():void{
-        //let allCars:Car[] = [...this.allCars]
         let allCars:Car[] = JSON.parse(JSON.stringify(this.allCars))
         let observedCars:ObservedCar[] = [...this.observedCars]
 
@@ -148,17 +159,12 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
 
         this.setObservedCarsAction.emit(allCars)
 
-        setTimeout(() => {
-            //console.log('gallery allCars', this.allCars)
-        }, 1000);
-        
-        //this.allCars = [...allCars]
     }
 
     filterCars():void{
-        
+
         let allCars = [...this.allCars];
-        let brands = [...this.brands];
+        let brands = [...this.brandsCB];
         let types = [...this.types];
         
         const checkedBrands = brands.filter(brand => brand.checked);
@@ -185,16 +191,16 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
         }
 
         this.filteredCars = [...filteredCars]
-        
+         
         this.countBrands(filteredCars);
         this.countTypes(filteredCars);
-    
+     
     }
  
     // conta le occorrenze di ogni brand, ad esempio ferrari(2)
     countBrands(cars:Car[]):void{
         
-        let brands = [...this.brands];
+        let brands = [...this.brandsCB];
         
         brands.map( brand => {
             
@@ -208,7 +214,7 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
         
         })
         
-        this.brands = brands
+        this.brandsCB = brands
     
     }
 
@@ -218,14 +224,19 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
         let types = [...this.types];
     
         types.map( type => {
+
             let count = 0;
+            
             cars.map( car => {
                 type.name == car.type ? count++ : null
+            
             })
+            
             type.count = count;
         })
 
-        this.types = types
+        
+        this.typesCB = types
     
     }
 
@@ -253,4 +264,5 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
     onSetNotObservedCar(carId:number):void{
         this.setNotObservedCarAction.emit(carId)
     }
+
 }

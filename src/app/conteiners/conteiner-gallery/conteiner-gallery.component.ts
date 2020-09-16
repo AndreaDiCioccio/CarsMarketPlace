@@ -27,26 +27,28 @@ import { takeUntil } from 'rxjs/operators';
     selector: 'app-conteiner-gallery',
     template:`
         <app-gallery [allCars]="allCars$ | async" 
-                    [brands]="brands" 
+                    [brands]="brands$ | async" 
                     [types]="types" 
-                    [usersRatings]="usersRatings" 
-                    [recentSeenCars]="recentSeenCars"
-                    [observedCars]="observedCars"
+                    [usersRatings]="usersRatings$ | async" 
+                    [recentSeenCars]="recentSeenCars$ | async"
+                    [observedCars]="observedCars$ | async"
                     
                     (setObservedCarAction)="onSetObservedCar($event)"
                     (setNotObservedCarAction)="onSetNotObservedCar($event)"
-                    (setObservedCarsAction)="onSetObservedCars($event)">
+                    (setObservedCarsAction)="onSetObservedCars($event)"
+                    (setBrandCount)="onSetBrandCount"
+                    (setTypeCount)="onSetTypeCount">
         </app-gallery>
     `
 })
 export class ConteinerGalleryComponent implements OnInit, OnDestroy {
 
     allCars$:Observable<Car[]>
-    brands:BrandCB[]
+    brands$:Observable<BrandCB[]>
     types:TypeCB[]
-    usersRatings:UserRating[]
-    recentSeenCars:RecentSeenCar[]
-    observedCars:ObservedCar[]
+    usersRatings$:Observable<UserRating[]>
+    recentSeenCars$:Observable<RecentSeenCar[]>
+    observedCars$:Observable<ObservedCar[]>
 
     unsubscripion:Subject<boolean> = new Subject<boolean>()
 
@@ -69,30 +71,9 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
         this.authService.currentUserValue ? this.store.dispatch(observedCarsActions.getObservedCars()) : null
 
         this.allCars$ = this.store.pipe(select(carsSelectors.getAllCars))
-            /* 
-            .pipe(
-                takeUntil(this.unsubscripion)
-            ).subscribe(
-                cars => {
-                    let jsonCars = JSON.stringify(cars)
-                    this.allCars = JSON.parse(jsonCars)
-                }
-            )
- */
-        
-
-        this.store.pipe(select(brandsSelectors.getBrands))
-            .pipe(
-                takeUntil(this.unsubscripion)
-            ).subscribe(
-                brands => {
-                    let jsonBrands = JSON.stringify(brands)
-                    this.brands = JSON.parse(jsonBrands)
-                }
-            )
-
-        
-
+           
+        this.brands$ = this.store.pipe(select(brandsSelectors.getBrands))
+            
         this.store.pipe(select(typeSelectors.getTypes))
             .pipe(
                 takeUntil(this.unsubscripion)
@@ -103,42 +84,12 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
                 }
             )
 
-        
+        this.usersRatings$ = this.store.pipe(select(userRatingsSelectors.getUsersRatings))
 
-        this.store.pipe(select(userRatingsSelectors.getUsersRatings))
-            .pipe(
-                takeUntil(this.unsubscripion)
-            ).subscribe(
-                usersRatings => {
-                    this.usersRatings = usersRatings
-                }
-            )
+        this.recentSeenCars$ = this.store.pipe(select(userRecentSeenCarsSelectors.getUsers))
 
-        
-
-        this.store.pipe(select(userRecentSeenCarsSelectors.getUsers))
-            .pipe(
-                takeUntil(this.unsubscripion)
-            ).subscribe(
-                users => {
-                    this.recentSeenCars = users
-                }
-            )
-
-        
-
-        this.store.pipe(select(userObservedCarsSelectors.getUsers))
-            .pipe(
-                takeUntil(this.unsubscripion)
-            ).subscribe(
-                users => {
-                    let jsonUsers = JSON.stringify(users)
-                    this.observedCars = JSON.parse(jsonUsers)
-                }
-            )
-
-        
-
+        this.observedCars$ = this.store.pipe(select(userObservedCarsSelectors.getUsers))
+            
     }
 
     onSetObservedCar(carId:number):void{
@@ -150,8 +101,15 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
         this.store.dispatch(observedCarsActions.setNotObservedCar({carId}))
     }
 
-    onSetObservedCars(cars:Car[]){
+    onSetObservedCars(cars:Car[]):void{
         this.store.dispatch(carsActions.setCarsWithObserved({cars}))
     }
 
+    onSetBrandCount(obj:BrandCB):void{
+
+    }
+
+    onSetTypeCount(obj:TypeCB):void{
+
+    }
 }

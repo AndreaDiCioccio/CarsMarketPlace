@@ -10,7 +10,7 @@ import { timeout } from 'rxjs/operators';
     templateUrl: './car-card-gallery.component.html',
     styleUrls: ['./car-card-gallery.component.css']
 })
-export class CarCardGalleryComponent implements OnInit, OnChanges{
+export class CarCardGalleryComponent implements OnInit{
 
     @Input() car:Car
     @Input() usersRatings:UserRating[]
@@ -24,10 +24,6 @@ export class CarCardGalleryComponent implements OnInit, OnChanges{
     iterableDiffer:IterableDiffer<any>
 
     constructor(public authService:AuthenticationService){ }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        //console.log('card changes', changes)
-    }
  
     ngOnInit():void{
         this.rating = this.addRating(this.usersRatings)

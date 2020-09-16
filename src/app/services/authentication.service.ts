@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { users } from '../mockData'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { User } from '../interfaces'
-import moment from 'moment'
+import * as moment from 'moment'
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
     
     private currentUserSubject: BehaviorSubject<User> = null
      
-    constructor() {
+    constructor(private router:Router) {
 
         if(this.isExpired()){
            
@@ -38,6 +39,8 @@ export class AuthenticationService {
         let userData = {idToken:'abcdefg', expiresIn:10000, user:user}    
         this.setSession(userData)
         this.currentUserSubject.next(user)
+
+        user ? this.router.navigateByUrl('/') : null
 
         return user
         

@@ -3,10 +3,15 @@ import { createAction, props } from '@ngrx/store'
 import { Car } from '../../interfaces'
 
 export const getBrands = createAction(
-    '[Cars] Get Brands'
+    '[Brand] Get Brands'
 )
 
 export const getBrandsSuccess = createAction(
-    '[Cars] Get Brands Success',
+    '[Brand] Get Brands Success',
     props<{brands:BrandCB[]}>()
+)
+
+export const setBrandCount = createAction(
+    '[Brand] Set Brand Count',
+    props<{obj:BrandCB}>()
 )
