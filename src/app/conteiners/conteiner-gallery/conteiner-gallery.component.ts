@@ -79,16 +79,7 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
         this.brands$ = this.store.pipe(select(brandsSelectors.getBrands))
             
         this.types$ = this.store.pipe(select(typeSelectors.getTypes))
-        /*
-            .pipe(
-                takeUntil(this.unsubscripion)
-            ).subscribe(
-                types => {
-                    let jsonTypes = JSON.stringify(types)
-                    this.types = JSON.parse(jsonTypes)
-                }
-            )
-*/
+        
         this.usersRatings$ = this.store.pipe(select(userRatingsSelectors.getUsersRatings))
 
         this.recentSeenCars$ = this.store.pipe(select(userRecentSeenCarsSelectors.getUsers))
