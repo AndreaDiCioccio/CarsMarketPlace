@@ -26,6 +26,7 @@ export class ShowUserRatingComponent implements OnInit{
 
     }
 
+    // costruisce l'array che serve per mostrare le stellette con gli url delle immagini
     buildRatingsStars():void{
 
         let ratingArray:string[] = new Array;

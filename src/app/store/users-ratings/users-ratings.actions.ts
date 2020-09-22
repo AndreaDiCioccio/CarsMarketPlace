@@ -1,3 +1,4 @@
+import { TypeCB } from './../../interfaces';
 import { UserRating } from '../../interfaces';
 import { createAction, props } from '@ngrx/store'
 

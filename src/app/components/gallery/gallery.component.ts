@@ -1,4 +1,4 @@
-import { observedCars } from './../../mockData';
+import { observedCars, brands } from './../../mockData';
 import { AuthenticationService } from './../../services/authentication.service';
 import { BrandCB, TypeCB, User, ObservedCar, UserRating } from './../../interfaces';
 import { Component, Input, OnInit, Output, EventEmitter, IterableDiffers, IterableDiffer, OnChanges, SimpleChanges, DoCheck, ChangeDetectorRef } from '@angular/core';
@@ -25,10 +25,14 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
     @Output() setObservedCarsAction = new EventEmitter<any>()
     @Output() setBrandCount = new EventEmitter<any>()
     @Output() setTypeCount = new EventEmitter<any>()
+    @Output() setBrandChecked = new EventEmitter<any>()
+    @Output() setTypeChecked = new EventEmitter<any>()
+    @Output() setBrandsChecked = new EventEmitter<any>()
+    @Output() setTypesChecked = new EventEmitter<any>()
 
     filteredCars:Car[] = []
-    brandsCB:BrandCB[] = []
-    typesCB:TypeCB[] = []
+/*     brandsCB:BrandCB[] = []
+    typesCB:TypeCB[] = [] */
 
     user:User
 
@@ -45,12 +49,14 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
         this.iterableDiffer = iterableDiffers.find([]).create(null);
     }
 
+    // evocata quando ci sono cambiamenti nelle proprietà di input
     ngOnChanges(changes: SimpleChanges): void {
-        changes.allCars ? this.filterCars() : null
+        // c'è bisogno di chiamare filterCars perchè oltre a filtrare le auto aggiorna l'array in visualizzazione
+        changes.allCars ? this.filterCars(this.brands, this.types) : null        
     }
 
     ngDoCheck(): void {
-        // usato a causa del click sui pulsanti observe / observed
+        // used when observed buttons are pressed
         let changes = this.iterableDiffer.diff(this.observedCars);
         if (changes) {
             this.user ? this.setObservedCars() : null
@@ -58,101 +64,140 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
 
     }
 
-    
-
     ngOnInit():void{
-        //this.filteredCars = this.allCars
         this.user = this.authService.currentUserValue
         this.user ? this.setObservedCars() : null
-        this.filterCars()
-        this.setBrands()
-        this.setTypes()
+        this.initFilters()
+        this.filterCars(this.brands, this.types)
 
         this.showNormalLeftConteiner()
         window.addEventListener('resize', () => this.showNormalLeftConteiner())
     }
 
-    setBrands():void{
-        this.brandsCB = JSON.parse(JSON.stringify(this.brands))
+    // setta le checkbox dei filtri a false se altre checkbox risultano selezionate
+    initFilters(){
+        let filtersBrands:boolean = false
+        let filtersTypes:boolean = false
+        this.brands.some( brand => brand.checked) ? filtersBrands = true : null
+        this.types.some( type => type.checked) ? filtersTypes = true : null
+
+        filtersBrands ? this.checkboxBrandAll = false : null
+        filtersTypes ? this.checkboxTypeAll = false : null
     }
 
-    setTypes():void{
-        this.typesCB = JSON.parse(JSON.stringify(this.types))
-    }
+    // operazioni da effettuara al cambiamento di una checkbox dei filtri.
+    checkboxChange(event, brand, type):void{
 
-    checkboxChange(event):void{
-        
         let name = event.target.name;
         let checked = event.target.checked;
         
+        let brands:BrandCB[] = JSON.parse(JSON.stringify(this.brands))
+        let types:TypeCB[] = JSON.parse(JSON.stringify(this.types))
+
         //BRANDS
-        let brands:BrandCB[] = [...this.brandsCB]
-
         if(name =='allBrands'){
-        
-            brands.map(brand => brand.checked = false);
 
-            this.brands = brands
+            if(checked == true){
+        
+                brands.map(brand => brand.checked = false);
+
+                this.checkboxBrandAll = true
+
+                this.filterCars(brands, types)
+                brands = this.countBrands(brands)
+                types = this.countTypes(types)
+                this.setBrandsChecked.emit(brands)
+                this.setTypesChecked.emit(types)
+            
+            }else{
+
+                setTimeout(() => {
+                    this.checkboxBrandAll = true
+                }, 10);
+                
+            }
+
 
         } else if(name == 'otherBrands'){
+
+            brands = brands.map( b => {
+                if(b.id == brand.id){
+                    return ({...brand, checked:checked})
+                }else{
+                    return b
+                }
+            })
 
             if(checked == true){
 
                 this.checkboxBrandAll = false;
+              
+            }else
+                brands.some( b => b.checked) ? null : this.checkboxBrandAll = true
 
-            } else {
-
-                let isOneChecked:boolean = false;
-                brands.map(brand => brand.checked ? isOneChecked = true : null)
-
-                if(!isOneChecked)
-                    this.checkboxBrandAll = true;
-
-            }
-
-            this.brandsCB = brands
+            this.filterCars(brands, types)
+            brands = this.countBrands(brands)
+            types = this.countTypes(types)
+            this.setBrandsChecked.emit(brands)
+            this.setTypesChecked.emit(types)
         
         }
 
-        // TYPES
-        let types:TypeCB[] = [...this.typesCB]
-
+        // TYPES        
         if(name =='allTypes'){
-    
-            types.map(type => type.checked = false)
-        
-            this.types = types
+
+            if(checked == true){
+
+                types.map(type => type.checked = false)
+
+                this.checkboxTypeAll = true
+            
+                this.filterCars(brands, types)
+                brands = this.countBrands(brands)
+                types = this.countTypes(types)
+                this.setBrandsChecked.emit(brands)
+                this.setTypesChecked.emit(types)
+
+            }else{
+                setTimeout(() => {
+                    this.checkboxTypeAll = true
+                }, 10);
+            }
 
         } else if(name == 'otherTypes'){
+
+            types = types.map( t => {
+                if(t.id == type.id){
+                    return ({...type, checked:checked})
+                }else{
+                    return t
+                }
+            })
 
             if(checked == true){
 
                 this.checkboxTypeAll = false;
 
-            } else {
+            }else
+                types.some( t => t.checked) ? null : this.checkboxTypeAll = true
 
-                let isOneChecked:boolean = false;
-                types.map (type => type.checked ? isOneChecked = true : null)
+            this.filterCars(brands, types)
+            brands = this.countBrands(brands)
+            types = this.countTypes(types)
+            this.setBrandsChecked.emit(brands)
+            this.setTypesChecked.emit(types)
 
-                if(!isOneChecked)
-                this.checkboxTypeAll = true;
-
-            }
-
-            this.types = types
-        
         }
-
-        this.filterCars();
 
     }
 
+    // aggiorna la proprietà "observed" di allCars
     setObservedCars():void{
         let allCars:Car[] = JSON.parse(JSON.stringify(this.allCars))
         let observedCars:ObservedCar[] = [...this.observedCars]
 
         allCars.map( car => {
-
+            // se la car è osservata, setta "observed" a true
             observedCars.some( obs => obs.carId == car.id) ? car.observed = true : car.observed = false
 
         })
@@ -161,11 +206,10 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
 
     }
 
-    filterCars():void{
+    // aggiorna l array per la gallery (this.filteredCars) con l'array modificato eventualmente nei filtri o nella proprietà observed (this.allCars)
+    filterCars(brands:BrandCB[], types:TypeCB[]):void{
 
         let allCars = [...this.allCars];
-        let brands = [...this.brandsCB];
-        let types = [...this.types];
         
         const checkedBrands = brands.filter(brand => brand.checked);
         const checkedTypes = types.filter(type => type.checked);
@@ -191,57 +235,52 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
         }
 
         this.filteredCars = [...filteredCars]
-         
-        this.countBrands(filteredCars);
-        this.countTypes(filteredCars);
-     
+
     }
  
     // conta le occorrenze di ogni brand, ad esempio ferrari(2)
-    countBrands(cars:Car[]):void{
-        
-        let brands = [...this.brandsCB];
-        
-        brands.map( brand => {
+    countBrands(brands:BrandCB[]):BrandCB[]{
+
+        let br:BrandCB[] = brands.map( brand => {
             
             let count = 0;
             
-            cars.map( car => {
+            this.filteredCars.forEach( car => {
                 brand.name == car.brand ? count++ : null
             })
             
             brand.count = count;
+
+            return brand
         
         })
         
-        this.brandsCB = brands
+        return br
     
     }
 
     // conta le occorrenze di ogni type, ad esempio jeep(2)
-    countTypes(cars:Car[]):void{
+    countTypes(types:TypeCB[]):TypeCB[]{
 
-        let types = [...this.types];
-    
-        types.map( type => {
+        let ty:TypeCB[] = types.map( type => {
 
             let count = 0;
             
-            cars.map( car => {
+            this.filteredCars.forEach( car => {
                 type.name == car.type ? count++ : null
             
             })
             
             type.count = count;
+
+            return type
         })
 
-        
-        this.typesCB = types
+        return ty
     
     }
 
     showMobileLeftConteiner():void{
-        console.log('show')
         this.leftConteinerClass = 'show-mobile-left-conteiner'
     }
 

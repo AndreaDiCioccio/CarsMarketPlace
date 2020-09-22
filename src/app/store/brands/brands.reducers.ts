@@ -13,6 +13,8 @@ export const initialBrandsState = adapter.getInitialState()
 export const brandsReducers = createReducer(
     initialBrandsState,
     on(brandsActions.getBrandsSuccess, (state, action) => adapter.addAll(action.brands, state)),
+    on(brandsActions.setBrandCheckedSuccess, (state, action) => adapter.upsertOne(action.brand, state)),
+    on(brandsActions.setBrandsCheckedSuccess, (state, action) => adapter.upsertMany(action.brands, state))
 );
 
 //selectAll is a method of EntitySelector Interface;

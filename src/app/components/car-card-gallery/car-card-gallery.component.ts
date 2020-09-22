@@ -8,7 +8,8 @@ import { timeout } from 'rxjs/operators';
 @Component({
     selector: 'app-car-card-gallery',
     templateUrl: './car-card-gallery.component.html',
-    styleUrls: ['./car-card-gallery.component.css']
+    styleUrls: ['./car-card-gallery.component.css'],
+    changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class CarCardGalleryComponent implements OnInit{
 
@@ -26,7 +27,7 @@ export class CarCardGalleryComponent implements OnInit{
     constructor(public authService:AuthenticationService){ }
  
     ngOnInit():void{
-        this.rating = this.addRating(this.usersRatings)
+        this.rating = this.calculateRating(this.usersRatings)
     }
 
 
@@ -34,11 +35,12 @@ export class CarCardGalleryComponent implements OnInit{
         return ({id:car.userId, username:car.username})
     }
 
-    addRating(usersRatings:UserRating[]):Rating{
+    // filtra l'array di tutti i ratings solo con i ratings dell' utente che vende la car e ritorna un oggetto Rating calcolato
+    calculateRating(usersRatings:UserRating[]):Rating{
 
-        usersRatings = usersRatings.filter(userRating => userRating.userId == this.car.userId)
+        let userRatings = usersRatings.filter(userRating => userRating.userId == this.car.userId)
 
-        let ratings:UserRating[] = usersRatings
+        let ratings:UserRating[] = userRatings
         let rating:Rating = {value:null, count:null}
         rating.count = ratings.length
         rating.value = ratings.reduce( (acc, cur) => acc + cur.value, 0) / rating.count

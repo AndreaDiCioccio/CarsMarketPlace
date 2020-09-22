@@ -53,6 +53,8 @@ export class AuthenticationService {
         localStorage.removeItem("currentUser");
         this.currentUserSubject.next(null);
 
+        this.router.navigateByUrl('/')
+
     }
 
     private setSession(authResult) {

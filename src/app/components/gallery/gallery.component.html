@@ -8,13 +8,23 @@
         <div class="filter-box-brand">
             <div class="filterLabel"><b>Brand</b></div>
             <label>
-                <input type="checkbox" id="allBrands" name="allBrands" value="all" 
-                [(ngModel)]="checkboxBrandAll" (change)="checkboxChange($event)"> all
+                <input type="checkbox" 
+                id="allBrands" 
+                name="allBrands" 
+                value="all" 
+                [(ngModel)]="checkboxBrandAll" 
+                (change)="checkboxChange($event, null, null)"> 
+                all
             </label>
-            <div class="checkboxList" *ngFor="let brand of brandsCB ">
+            <div class="checkboxList" *ngFor="let brand of brands ">
                 <label>
-                    <input type="checkbox" id="{{brand.name}}" name="otherBrands" value="{{brand.name}}"
-                    [(ngModel)]="brand.checked" (change)="checkboxChange($event)"> {{brand.name}}
+                    <input type="checkbox" 
+                    id="{{brand.name}}" 
+                    name="otherBrands" 
+                    value="{{brand.name}}"
+                    [checked]="brand.checked" 
+                    (change)="checkboxChange($event, brand, null)"> 
+                    {{brand.name}}
                 </label>
                 <label class="labelCount"> ({{brand.count}})</label>
             </div>
@@ -22,9 +32,26 @@
         <br>
         <div class="filter-box-type">
             <div class="filterLabel"><b>Type</b></div>
-            <label><input type="checkbox" id="allType" name="allTypes" value="all" [(ngModel)]="checkboxTypeAll" (change)="checkboxChange($event)"> all</label>
-            <div class="checkboxList" *ngFor="let type of typesCB">
-                <label><input type="checkbox" [(ngModel)]="type.checked" id="{{type.name}}" name="otherTypes" value="{{type.name}}" (change)="checkboxChange($event)"> {{type.name}}</label><label class="labelCount"> ({{type.count}})</label>
+            <label>
+                <input type="checkbox" 
+                    id="allType" 
+                    name="allTypes" 
+                    value="all" 
+                    [(ngModel)]="checkboxTypeAll" 
+                    (change)="checkboxChange($event, null, null)"> 
+                all
+            </label>
+            <div class="checkboxList" *ngFor="let type of types">
+                <label>
+                    <input type="checkbox" 
+                        id="{{type.name}}" 
+                        name="otherTypes" 
+                        value="{{type.name}}"
+                        [checked]="type.checked" 
+                        (change)="checkboxChange($event, null, type)"> 
+                    {{type.name}}
+                </label>
+                <label class="labelCount"> ({{type.count}})</label>
             </div>
         </div>
         <button class="hide-button" (click)="hideLeftContenier()">close</button>

@@ -28,7 +28,7 @@ import { takeUntil } from 'rxjs/operators';
     template:`
         <app-gallery [allCars]="allCars$ | async" 
                     [brands]="brands$ | async" 
-                    [types]="types" 
+                    [types]="types$ | async" 
                     [usersRatings]="usersRatings$ | async" 
                     [recentSeenCars]="recentSeenCars$ | async"
                     [observedCars]="observedCars$ | async"
@@ -36,8 +36,12 @@ import { takeUntil } from 'rxjs/operators';
                     (setObservedCarAction)="onSetObservedCar($event)"
                     (setNotObservedCarAction)="onSetNotObservedCar($event)"
                     (setObservedCarsAction)="onSetObservedCars($event)"
-                    (setBrandCount)="onSetBrandCount"
-                    (setTypeCount)="onSetTypeCount">
+                    (setBrandCount)="onSetBrandCount($event)"
+                    (setTypeCount)="onSetTypeCount($event)"
+                    (setBrandChecked)="onSetBrandChecked($event)"
+                    (setBrandsChecked)="onSetBrandsChecked($event)"
+                    (setTypeChecked)="onSetTypeChecked($event)"
+                    (setTypesChecked)="onSetTypesChecked($event)">
         </app-gallery>
     `
 })
@@ -45,7 +49,7 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
 
     allCars$:Observable<Car[]>
     brands$:Observable<BrandCB[]>
-    types:TypeCB[]
+    types$:Observable<TypeCB[]>
     usersRatings$:Observable<UserRating[]>
     recentSeenCars$:Observable<RecentSeenCar[]>
     observedCars$:Observable<ObservedCar[]>
@@ -74,7 +78,8 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
            
         this.brands$ = this.store.pipe(select(brandsSelectors.getBrands))
             
-        this.store.pipe(select(typeSelectors.getTypes))
+        this.types$ = this.store.pipe(select(typeSelectors.getTypes))
+        /*
             .pipe(
                 takeUntil(this.unsubscripion)
             ).subscribe(
@@ -83,7 +88,7 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
                     this.types = JSON.parse(jsonTypes)
                 }
             )
-
+*/
         this.usersRatings$ = this.store.pipe(select(userRatingsSelectors.getUsersRatings))
 
         this.recentSeenCars$ = this.store.pipe(select(userRecentSeenCarsSelectors.getUsers))
@@ -111,5 +116,21 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
 
     onSetTypeCount(obj:TypeCB):void{
 
+    }
+
+    onSetBrandChecked(brand:BrandCB):void{
+        this.store.dispatch(brandsActions.setBrandChecked({brand}))
+    }
+
+    onSetBrandsChecked(brands:BrandCB[]):void{
+        this.store.dispatch(brandsActions.setBrandsChecked({brands}))
+    }
+
+    onSetTypeChecked(typee:TypeCB):void{
+        this.store.dispatch(typesActions.setTypeChecked({typee}))
+    }
+
+    onSetTypesChecked(types:TypeCB[]):void{
+        this.store.dispatch(typesActions.setTypesChecked({types}))
     }
 }

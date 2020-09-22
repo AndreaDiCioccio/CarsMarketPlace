@@ -28,11 +28,37 @@ export class MockService {
     }
 
     getBrands():Observable<BrandCB[]>{
-        return of(brands)
+        let jsonBrands = JSON.parse(JSON.stringify(brands))
+        return of(jsonBrands)
+    }
+
+    setBrandChecked(brand:BrandCB):Observable<BrandCB>{
+        brands.map( b => b.id == brand.id ? b.checked = brand.checked : null)
+        return of(brand['brand'])
+    }
+
+    setBrandsChecked(bs:BrandCB[]):Observable<BrandCB[]>{
+        brands.splice(0, brands.length)
+        bs['brands'].forEach(brand => brands.push(brand))
+        let jsonBrands = JSON.parse(JSON.stringify(brands))
+        return of(jsonBrands)
     }
 
     getTypes():Observable<TypeCB[]>{
-        return of(types)
+        let jsonTypes = JSON.parse(JSON.stringify(types))
+        return of(jsonTypes)
+    }
+
+    setTypeChecked(type:TypeCB):Observable<TypeCB>{
+        types.map( t => t.id == type.id ? t.checked = type.checked : null)
+        return of(type['typee'])
+    }
+
+    setTypesChecked(ts:TypeCB[]):Observable<TypeCB[]>{
+        types.splice(0, types.length)
+        ts['types'].forEach(type => types.push(type))
+        let jsonTypes = JSON.parse(JSON.stringify(types))
+        return of(jsonTypes)
     }
 
     getUsersRatings():Observable<UserRating[]>{

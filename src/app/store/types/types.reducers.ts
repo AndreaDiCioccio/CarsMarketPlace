@@ -13,6 +13,8 @@ export const initialTypesState = adapter.getInitialState()
 export const typesReducers = createReducer(
     initialTypesState,
     on(typesActions.getTypesSuccess, (state, action) => adapter.addAll(action.types, state)),
+    on(typesActions.setTypeCheckedSuccess, (state, action) => adapter.upsertOne(action.typee, state)),
+    on(typesActions.setTypesCheckedSuccess, (state, action) => adapter.upsertMany(action.types, state))
 );
 
 //selectAll is a method of EntitySelector Interface;
