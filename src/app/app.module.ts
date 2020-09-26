@@ -17,6 +17,8 @@ import { BrandsModule } from './store/brands/brands.module';
 import { UsersRatingsModule } from './store/users-ratings/users-ratings.module'
 import { RecentSeenCarsModule } from './store/recentSeenCars/recentSeenCars.module'
 import { ObservedCarsModule } from './store/observedCars/observedCars.module'
+import { StatusModule } from './store/status/module.status'
+
 
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { ConteinerGalleryComponent } from './conteiners/conteiner-gallery/conteiner-gallery.component';
@@ -54,6 +56,7 @@ import { RecentSeenCarsComponent } from './components/recent-seen-cars/recent-se
         UsersRatingsModule,
         RecentSeenCarsModule,
         ObservedCarsModule,
+        StatusModule,
         
         FontAwesomeModule
 

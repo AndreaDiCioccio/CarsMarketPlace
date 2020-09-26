@@ -1,8 +1,9 @@
+import { AuxiliarService } from './auxiliar.service';
 import { Injectable } from '@angular/core';
 import { users } from '../mockData'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { User } from '../interfaces'
-import * as moment from 'moment'
+import moment from 'moment'
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
@@ -10,7 +11,7 @@ export class AuthenticationService {
     
     private currentUserSubject: BehaviorSubject<User> = null
      
-    constructor(private router:Router) {
+    constructor(private router:Router, private auxiliarService:AuxiliarService) {
 
         if(this.isExpired()){
            
@@ -52,6 +53,8 @@ export class AuthenticationService {
         localStorage.removeItem("expires_at");
         localStorage.removeItem("currentUser");
         this.currentUserSubject.next(null);
+
+        this.auxiliarService.logout()
 
         this.router.navigateByUrl('/')
 

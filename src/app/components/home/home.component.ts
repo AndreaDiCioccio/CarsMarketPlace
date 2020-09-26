@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { state, style, transition, animate, trigger } from '@angular/animations';
+import { timeout } from 'rxjs/operators';
 
 
 @Component({
@@ -23,7 +24,12 @@ import { state, style, transition, animate, trigger } from '@angular/animations'
         ])
     ]
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit, OnDestroy{    
+
+
+    timeOut1:number
+    timeOuts:number[] = []
+    count:number = 0
 
     phrase1:string = 'hide'
     phrase2:string = 'hide'
@@ -34,17 +40,25 @@ export class HomeComponent implements OnInit{
 
     ngOnInit():void{
 
-        setTimeout(() => {
+        this.timeOut1 = setTimeout(() => {
             this.phrase1 = 'show'
         }, 1000);
 
+    }
+
+    ngOnDestroy():void {
+        clearTimeout(this.timeOut1)
+        for(let j=0;j<this.timeOuts.length;j++){
+            clearTimeout(this.timeOuts[j])
+        }
+        
     }
 
     animationPhraseDone(event:any, phrase:string){
         
         if(event.toState == "show"){
 
-            setTimeout(() => {
+            let timeOut = setTimeout(() => {
 
                 switch(phrase){
 
@@ -81,8 +95,12 @@ export class HomeComponent implements OnInit{
                 }
             }, 6000);
 
+            this.timeOuts.push(timeOut)
+            this.count++
+
         }
 
     }
 
 }
+

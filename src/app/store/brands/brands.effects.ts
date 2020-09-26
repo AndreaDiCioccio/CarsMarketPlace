@@ -8,23 +8,15 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Injectable()
-export class BrandsEffects implements OnDestroy{
-
-    unsubscribe:Subject<boolean> = new Subject()
+export class BrandsEffects{
 
     constructor( private actions$: Actions, private mockService: MockService ) {}
-
-    ngOnDestroy(): void {
-        this.unsubscribe.next(true)
-        this.unsubscribe.complete()
-    }
 
     getAllBrands$ = createEffect(() => 
         this.actions$.pipe(
             ofType(brandsActions.getBrands.type),
             mergeMap( () => this.mockService.getBrands()),
-            map( (brands:BrandCB[]) => brandsActions.getBrandsSuccess({brands})),
-            takeUntil(this.unsubscribe)
+            map( (brands:BrandCB[]) => brandsActions.getBrandsSuccess({brands}))
         )
     )
 
@@ -32,8 +24,7 @@ export class BrandsEffects implements OnDestroy{
         this.actions$.pipe(
             ofType(brandsActions.setBrandChecked.type),
             mergeMap( brand => this.mockService.setBrandChecked(brand)),
-            map( (brand:BrandCB) => brandsActions.setBrandCheckedSuccess({brand})),
-            takeUntil(this.unsubscribe)
+            map( (brand:BrandCB) => brandsActions.setBrandCheckedSuccess({brand}))
         )
     )
 
@@ -41,8 +32,7 @@ export class BrandsEffects implements OnDestroy{
         this.actions$.pipe(
             ofType(brandsActions.setBrandsChecked.type),
             mergeMap( brands => this.mockService.setBrandsChecked(brands)),
-            map( (brands:BrandCB[]) => brandsActions.setBrandsCheckedSuccess({brands})),
-            takeUntil(this.unsubscribe)
+            map( (brands:BrandCB[]) => brandsActions.setBrandsCheckedSuccess({brands}))
         )
     )
 

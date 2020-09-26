@@ -8,23 +8,15 @@ import * as observedCarsActions from './observedCars.actions'
 import { Subject } from 'rxjs';
 
 @Injectable()
-export class ObservedCarsEffects implements OnDestroy{
-
-    unsubscribe:Subject<boolean> = new Subject()
+export class ObservedCarsEffects{
 
     constructor( private actions$: Actions, private mockService: MockService ) {}
-
-    ngOnDestroy(): void {
-        this.unsubscribe.next(true)
-        this.unsubscribe.complete()
-    }
 
     getUsersObservedCars$ = createEffect(() => 
         this.actions$.pipe(
             ofType(observedCarsActions.getObservedCars.type),
             mergeMap( () => this.mockService.getObservedCars()),
-            map( (observedCars:ObservedCar[]) => observedCarsActions.getObservedCarsSuccess({observedCars})),
-            takeUntil(this.unsubscribe)
+            map( (observedCars:ObservedCar[]) => observedCarsActions.getObservedCarsSuccess({observedCars}))
         )
     )
 
@@ -32,8 +24,7 @@ export class ObservedCarsEffects implements OnDestroy{
         this.actions$.pipe(
             ofType(observedCarsActions.setObservedCar.type),
             mergeMap( (carId:number) => this.mockService.setObservedCar(carId)),
-            map( observed => observedCarsActions.setObservedCarSuccess({observed})),
-            takeUntil(this.unsubscribe)
+            map( observed => observedCarsActions.setObservedCarSuccess({observed}))
         )
     )
 
@@ -41,8 +32,7 @@ export class ObservedCarsEffects implements OnDestroy{
         this.actions$.pipe(
             ofType(observedCarsActions.setNotObservedCar.type),
             mergeMap( (notObserved:ObservedCar) => this.mockService.setNotObservedCar(notObserved )),
-            map( observedCars => observedCarsActions.setNotObservedCarSuccess({observedCars})),
-            takeUntil(this.unsubscribe)
+            map( observedCars => observedCarsActions.setNotObservedCarSuccess({observedCars}))
         )
     )
 

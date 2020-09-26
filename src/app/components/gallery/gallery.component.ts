@@ -74,7 +74,7 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
         window.addEventListener('resize', () => this.showNormalLeftConteiner())
     }
 
-    // setta le checkbox dei filtri a false se altre checkbox risultano selezionate
+    // setta le checkbox degli "all" dei filtri a false se altre checkbox risultano selezionate
     initFilters(){
         let filtersBrands:boolean = false
         let filtersTypes:boolean = false

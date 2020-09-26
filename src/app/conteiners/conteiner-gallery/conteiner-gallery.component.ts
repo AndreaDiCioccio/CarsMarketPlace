@@ -1,3 +1,4 @@
+import { takeUntil, tap } from 'rxjs/operators';
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
@@ -10,6 +11,7 @@ import * as typesActions from '../../store/types/types.actions'
 import * as userRatingsActions from '../../store/users-ratings/users-ratings.actions'
 import * as recentSeenCarsActions from '../../store/recentSeenCars/recentSeenCars.actions'
 import * as observedCarsActions from '../../store/observedCars/observedCars.actions'
+import * as statusActions from '../../store/status/actions.status'
 
 import * as carsSelectors from '../../store/cars/cars.selectors'
 import * as brandsSelectors from '../../store/brands/brands.selectors'
@@ -17,8 +19,10 @@ import * as typeSelectors from '../../store/types/types.selectors'
 import * as userRatingsSelectors from '../../store/users-ratings/users-ratings.selectors'
 import * as userRecentSeenCarsSelectors from '../../store/recentSeenCars/recentSeenCars.selectors'
 import * as userObservedCarsSelectors from '../../store/observedCars/observedCars.selectors'
-import { Subscription, Subject, Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import * as statusSelectors from '../../store/status/selectors.status'
+
+import { Subject, Observable } from 'rxjs';
+
 
 
 
@@ -36,8 +40,6 @@ import { takeUntil } from 'rxjs/operators';
                     (setObservedCarAction)="onSetObservedCar($event)"
                     (setNotObservedCarAction)="onSetNotObservedCar($event)"
                     (setObservedCarsAction)="onSetObservedCars($event)"
-                    (setBrandCount)="onSetBrandCount($event)"
-                    (setTypeCount)="onSetTypeCount($event)"
                     (setBrandChecked)="onSetBrandChecked($event)"
                     (setBrandsChecked)="onSetBrandsChecked($event)"
                     (setTypeChecked)="onSetTypeChecked($event)"
@@ -45,7 +47,8 @@ import { takeUntil } from 'rxjs/operators';
         </app-gallery>
     `
 })
-export class ConteinerGalleryComponent implements OnInit, OnDestroy {
+
+export class ConteinerGalleryComponent implements OnInit, OnDestroy{
 
     allCars$:Observable<Car[]>
     brands$:Observable<BrandCB[]>
@@ -54,25 +57,42 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
     recentSeenCars$:Observable<RecentSeenCar[]>
     observedCars$:Observable<ObservedCar[]>
 
-    unsubscripion:Subject<boolean> = new Subject<boolean>()
+    unsubscription$:Subject<boolean> = new Subject
 
-    constructor( private store:Store<StoreState>, private authService:AuthenticationService){
+    isStoreLoaded:boolean = false
+    isStoreRecentSeenCarsLoaded:boolean = false
 
-    }
+    constructor( private store:Store<StoreState>, private authService:AuthenticationService){}
 
-    ngOnDestroy(): void {
-        this.unsubscripion.next(true)
-        this.unsubscripion.complete()
+    ngOnDestroy():void{
+        this.unsubscription$.next(true)
+        this.unsubscription$.complete()
     }
 
     ngOnInit(): void {
 
-        this.store.dispatch(carsActions.getAllCars())
-        this.store.dispatch(brandsActions.getBrands())
-        this.store.dispatch(typesActions.getTypes())
-        this.store.dispatch(userRatingsActions.getUsersRatings())
-        this.authService.currentUserValue ? this.store.dispatch(recentSeenCarsActions.getRecentSeenCars()) : null
-        this.authService.currentUserValue ? this.store.dispatch(observedCarsActions.getObservedCars()) : null
+        this.store.pipe(select(statusSelectors.isStoreLoaded))
+            .pipe( takeUntil(this.unsubscription$))
+            .subscribe( loaded => this.isStoreLoaded = loaded)
+
+        this.store.pipe(select(statusSelectors.isRecentSeenCarsLoaded))
+            .pipe(takeUntil(this.unsubscription$))
+            .subscribe( loaded => this.isStoreRecentSeenCarsLoaded = loaded)
+
+        !this.isStoreLoaded ? this.store.dispatch(carsActions.getAllCars()) : null
+        !this.isStoreLoaded ? this.store.dispatch(brandsActions.getBrands()) : null
+        !this.isStoreLoaded ? this.store.dispatch(typesActions.getTypes()) : null
+        !this.isStoreLoaded ? this.store.dispatch(userRatingsActions.getUsersRatings()) : null
+
+        if(!this.isStoreRecentSeenCarsLoaded && this.authService.currentUserValue){
+            this.store.dispatch(recentSeenCarsActions.getRecentSeenCars())
+            this.store.dispatch(statusActions.setRecentSeenCarsLoaded({loaded:true}))
+        }
+
+        if(!this.isStoreLoaded)
+            this.authService.currentUserValue ? this.store.dispatch(observedCarsActions.getObservedCars()) : null
+
+        this.store.dispatch(statusActions.setStoreLoaded({loaded:true}))
 
         this.allCars$ = this.store.pipe(select(carsSelectors.getAllCars))
            
@@ -101,14 +121,6 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
         this.store.dispatch(carsActions.setCarsWithObserved({cars}))
     }
 
-    onSetBrandCount(obj:BrandCB):void{
-
-    }
-
-    onSetTypeCount(obj:TypeCB):void{
-
-    }
-
     onSetBrandChecked(brand:BrandCB):void{
         this.store.dispatch(brandsActions.setBrandChecked({brand}))
     }
@@ -123,5 +135,9 @@ export class ConteinerGalleryComponent implements OnInit, OnDestroy {
 
     onSetTypesChecked(types:TypeCB[]):void{
         this.store.dispatch(typesActions.setTypesChecked({types}))
+    }
+
+    public logout():void{
+        this.store.dispatch(statusActions.setRecentSeenCarsLoaded({loaded:false}))
     }
 }

@@ -7,23 +7,15 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Injectable()
-export class CarsEffects implements OnDestroy{
-
-    unsubscribe:Subject<boolean> = new Subject()
+export class CarsEffects{
 
     constructor( private actions$: Actions, private mockService: MockService ) {}
-
-    ngOnDestroy(): void {
-        this.unsubscribe.next(true)
-        this.unsubscribe.complete()
-    }
 
     getAllCars$ = createEffect(() => 
         this.actions$.pipe(
             ofType(carsActions.getAllCars.type),
             mergeMap( () => this.mockService.getAllCars()),
-            map( (cars:Car[]) => carsActions.getAllCarsSuccess({cars})),
-            takeUntil(this.unsubscribe)
+            map( (cars:Car[]) => carsActions.getAllCarsSuccess({cars}))
         )
     )
 
@@ -31,8 +23,7 @@ export class CarsEffects implements OnDestroy{
         this.actions$.pipe(
             ofType(carsActions.setCarsWithObserved.type),
             mergeMap( (cars:Car[]) => this.mockService.setCarsWithObserved(cars)),
-            map( (cars:Car[]) => carsActions.setCarsWithObservedSuccess({cars})),
-            takeUntil(this.unsubscribe)
+            map( (cars:Car[]) => carsActions.setCarsWithObservedSuccess({cars}))
         )
     )
 

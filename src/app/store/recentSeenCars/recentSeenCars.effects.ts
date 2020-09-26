@@ -7,23 +7,15 @@ import * as recentSeenCarsActions from './recentSeenCars.actions'
 import { Subject } from 'rxjs';
 
 @Injectable()
-export class RecentSeenCarsEffects implements OnDestroy{
-
-    unsubscribe:Subject<boolean> = new Subject()
+export class RecentSeenCarsEffects{
 
     constructor( private actions$: Actions, private mockService: MockService ) {}
-
-    ngOnDestroy(): void {
-        this.unsubscribe.next(true)
-        this.unsubscribe.complete()
-    }
 
     getUsersRatings$ = createEffect(() => 
         this.actions$.pipe(
             ofType(recentSeenCarsActions.getRecentSeenCars.type),
             mergeMap( () => this.mockService.getRecentSeenCars()),
-            map( (recentSeenCars:RecentSeenCar[]) => recentSeenCarsActions.getRecentSeenCarsSuccess({recentSeenCars})),
-            takeUntil(this.unsubscribe)
+            map( (recentSeenCars:RecentSeenCar[]) => recentSeenCarsActions.getRecentSeenCarsSuccess({recentSeenCars}))
         )
     )
 
