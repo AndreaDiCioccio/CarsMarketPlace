@@ -1,3 +1,4 @@
+import { observedCars, brands } from './../../mockData';
 import { AuthenticationService } from './../../services/authentication.service';
 import { BrandCB, TypeCB, User, ObservedCar, UserRating } from './../../interfaces';
 import { Component, Input, OnInit, Output, EventEmitter, IterableDiffers, IterableDiffer, OnChanges, SimpleChanges, DoCheck, ChangeDetectorRef } from '@angular/core';
@@ -67,7 +68,7 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
         this.user = this.authService.currentUserValue
         this.user ? this.setObservedCars() : null
         this.initFilters()
-        this.filteredCars = this.filterCars(this.brands, this.types, this.allCars)
+        this.filteredCars = this.filterCars(this.brands, this.types)
 
         this.showNormalLeftConteiner()
         window.addEventListener('resize', () => this.showNormalLeftConteiner())
@@ -85,133 +86,101 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
         filtersTypes ? this.checkboxTypeAll = false : null
     }
 
-    checkboxBrandAllChange(checked:boolean):void{
-        
-        let brands:BrandCB[] = JSON.parse(JSON.stringify(this.brands))
-        let types:TypeCB[] = JSON.parse(JSON.stringify(this.types))
-
-        if(checked == true){
-        
-            brands.map(brand => brand.checked = false);
-
-            this.checkboxBrandAll = true
-
-            this.filteredCars = this.filterCars(brands, types, this.allCars)
-            brands = this.countBrands(brands)
-            types = this.countTypes(types)
-            this.setBrandsChecked.emit(brands)
-            this.setTypesChecked.emit(types)
-        
-        }else{
-            setTimeout( () => this.checkboxBrandAll = true, 500)            
-        }
-    }
-
-    checkboxBrandsChange(checked:boolean, brand):void{
-
-        let brands:BrandCB[] = JSON.parse(JSON.stringify(this.brands))
-        let types:TypeCB[] = JSON.parse(JSON.stringify(this.types))
-
-        brands = brands.map( b => {
-            if(b.id == brand.id){
-                return ({...brand, checked:checked})
-            }else{
-                return b
-            }
-        })
-
-        if(checked == true){
-
-            this.checkboxBrandAll = false;
-          
-        }else
-            brands.some( b => b.checked) ? null : this.checkboxBrandAll = true
-
-        this.filteredCars = this.filterCars(brands, types, this.allCars)
-        brands = this.countBrands(brands)
-        types = this.countTypes(types)
-        this.setBrandsChecked.emit(brands)
-        this.setTypesChecked.emit(types)
-
-    }
-
-    checkboxTypesAllChange(checked:boolean):void{
-
-        let brands:BrandCB[] = JSON.parse(JSON.stringify(this.brands))
-        let types:TypeCB[] = JSON.parse(JSON.stringify(this.types))
-
-        if(checked == true){
-
-            types.map(type => type.checked = false)
-
-            this.checkboxTypeAll = true
-        
-            this.filteredCars = this.filterCars(brands, types, this.allCars)
-            brands = this.countBrands(brands)
-            types = this.countTypes(types)
-            this.setBrandsChecked.emit(brands)
-            this.setTypesChecked.emit(types)
-
-        }else{
-            setTimeout(() =>  this.checkboxTypeAll = true, 500)
-        }
-
-    }
-
-    checkboxTypesChange(checked:boolean, type){
-
-        let brands:BrandCB[] = JSON.parse(JSON.stringify(this.brands))
-        let types:TypeCB[] = JSON.parse(JSON.stringify(this.types))
-
-        types = types.map( t => {
-            if(t.id == type.id){
-                return ({...type, checked:checked})
-            }else{
-                return t
-            }
-        })
-
-        if(checked == true){
-
-            this.checkboxTypeAll = false;
-
-        }else
-            types.some( t => t.checked) ? null : this.checkboxTypeAll = true
-
-        this.filteredCars = this.filterCars(brands, types, this.allCars)
-        brands = this.countBrands(brands)
-        types = this.countTypes(types)
-        this.setBrandsChecked.emit(brands)
-        this.setTypesChecked.emit(types)
-
-    }
-    
     // operazioni da effettuara al cambiamento di una checkbox dei filtri.
     checkboxChange(event, brand, type):void{
 
         let name = event.target.name;
         let checked = event.target.checked;
         
+        let brands:BrandCB[] = JSON.parse(JSON.stringify(this.brands))
+        let types:TypeCB[] = JSON.parse(JSON.stringify(this.types))
+
         //BRANDS
         if(name =='allBrands'){
 
-            this.checkboxBrandAllChange(checked)
+            if(checked == true){
+        
+                brands.map(brand => brand.checked = false);
+
+                this.checkboxBrandAll = true
+
+                this.filteredCars = this.filterCars(brands, types)
+                brands = this.countBrands(brands)
+                types = this.countTypes(types)
+                this.setBrandsChecked.emit(brands)
+                this.setTypesChecked.emit(types)
+            
+            }else{
+                this.checkboxBrandAll = true
+            }
 
 
         } else if(name == 'otherBrands'){
 
-           this.checkboxBrandsChange(checked, brand)
+            brands = brands.map( b => {
+                if(b.id == brand.id){
+                    return ({...brand, checked:checked})
+                }else{
+                    return b
+                }
+            })
+
+            if(checked == true){
+
+                this.checkboxBrandAll = false;
+              
+            }else
+                brands.some( b => b.checked) ? null : this.checkboxBrandAll = true
+
+            this.filteredCars = this.filterCars(brands, types)
+            brands = this.countBrands(brands)
+            types = this.countTypes(types)
+            this.setBrandsChecked.emit(brands)
+            this.setTypesChecked.emit(types)
         
         }
 
         // TYPES        
         if(name =='allTypes'){
 
-            this.checkboxTypesAllChange(checked)
+            if(checked == true){
+
+                types.map(type => type.checked = false)
+
+                this.checkboxTypeAll = true
+            
+                this.filteredCars = this.filterCars(brands, types)
+                brands = this.countBrands(brands)
+                types = this.countTypes(types)
+                this.setBrandsChecked.emit(brands)
+                this.setTypesChecked.emit(types)
+
+            }else{
+                this.checkboxTypeAll = true
+            }
 
         } else if(name == 'otherTypes'){
 
-            this.checkboxTypesChange(checked, type)
+            types = types.map( t => {
+                if(t.id == type.id){
+                    return ({...type, checked:checked})
+                }else{
+                    return t
+                }
+            })
+
+            if(checked == true){
+
+                this.checkboxTypeAll = false;
+
+            }else
+                types.some( t => t.checked) ? null : this.checkboxTypeAll = true
+
+            this.filteredCars = this.filterCars(brands, types)
+            brands = this.countBrands(brands)
+            types = this.countTypes(types)
+            this.setBrandsChecked.emit(brands)
+            this.setTypesChecked.emit(types)
 
         }
 
@@ -233,8 +202,9 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
     }
 
     // aggiorna l array per la gallery (this.filteredCars) con l'array modificato eventualmente nei filtri o nella proprietà observed (this.allCars)
-    filterCars(brands:BrandCB[], types:TypeCB[], allCars:Car[]):Car[]{
+    filterCars(brands:BrandCB[], types:TypeCB[]):Car[]{
 
+        let allCars = [...this.allCars];
         let filteredCars:Car[];
 
         const checkedBrands:BrandCB[] = brands.filter(brand => brand.checked);

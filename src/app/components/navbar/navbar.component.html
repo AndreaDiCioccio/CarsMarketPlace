@@ -33,7 +33,11 @@
             <button class="nav-button user-button" (click)="showUserInterface()">{{authService.currentUserValue.username}}</button>
             <div class="drop-down-user" id="drop-down-user">
                 <div><button class="interface-button">Profile</button></div>
-                <div><button class="interface-button">Observed Cars</button></div>
+                <div>
+                    <a routerLink='observed-cars'>
+                        <button class="interface-button">Observed Cars</button>
+                    </a>
+                </div>
                 <button class="interface-button" (click)="logout()">Logout</button>
                 <button class="close-button" (click)="closeUserInterface()">Close</button>
             </div>

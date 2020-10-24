@@ -4,8 +4,7 @@ import { createEffect, ofType, Actions } from '@ngrx/effects'
 import { MockService } from '../../services/mock.service';
 import { mergeMap, map, tap, takeUntil } from 'rxjs/operators'
 import { Injectable, OnDestroy } from '@angular/core';
-import * as observedCarsActions from './observedCars.actions'
-import { Subject } from 'rxjs';
+import * as observedCarsActions from './userObservedCars.actions'
 
 @Injectable()
 export class ObservedCarsEffects{
@@ -14,9 +13,9 @@ export class ObservedCarsEffects{
 
     getUsersObservedCars$ = createEffect(() => 
         this.actions$.pipe(
-            ofType(observedCarsActions.getObservedCars.type),
-            mergeMap( () => this.mockService.getObservedCars()),
-            map( (observedCars:ObservedCar[]) => observedCarsActions.getObservedCarsSuccess({observedCars}))
+            ofType(observedCarsActions.getUserObservedCars.type),
+            mergeMap( () => this.mockService.getUserObservedCars()),
+            map( (observedCars:ObservedCar[]) => observedCarsActions.getUserObservedCarsSuccess({observedCars}))
         )
     )
 
@@ -33,6 +32,14 @@ export class ObservedCarsEffects{
             ofType(observedCarsActions.setNotObservedCar.type),
             mergeMap( (notObserved:ObservedCar) => this.mockService.setNotObservedCar(notObserved )),
             map( observedCars => observedCarsActions.setNotObservedCarSuccess({observedCars}))
+        )
+    )
+
+    removeObservedCars$ = createEffect(() => 
+        this.actions$.pipe(
+            ofType(observedCarsActions.removeSelectedCars.type),
+            mergeMap( (action) => this.mockService.removeObservedCars(action['cars'])),
+            map( cars => observedCarsActions.removeSelectedCarsSuccess({cars}))
         )
     )
 

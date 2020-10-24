@@ -1,5 +1,3 @@
-import { ConteinerGalleryComponent } from './../../conteiners/conteiner-gallery/conteiner-gallery.component';
-import { style } from '@angular/animations';
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';

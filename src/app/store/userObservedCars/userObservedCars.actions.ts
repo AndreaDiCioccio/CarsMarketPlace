@@ -1,12 +1,12 @@
 import { ObservedCar, Car } from '../../interfaces';
 import { createAction, props } from '@ngrx/store'
 
-export const getObservedCars = createAction(
-    '[Users] Get ObservedCars'
+export const getUserObservedCars = createAction(
+    '[Users] Get UserObservedCars'
 )
 
-export const getObservedCarsSuccess = createAction(
-    '[Users] Get ObservedCars Success',
+export const getUserObservedCarsSuccess = createAction(
+    '[Users] Get UserObservedCars Success',
     props<{observedCars:ObservedCar[]}>()
 )
 
@@ -28,4 +28,14 @@ export const setNotObservedCar = createAction(
 export const setNotObservedCarSuccess = createAction(
     '[Users] Set Not Observed Car Success',
     props<{observedCars:ObservedCar[]}>()
+)
+
+export const removeSelectedCars = createAction(
+    '[Container Observed] RemoveObservedCars',
+    props<{cars:number[]}>()
+)
+
+export const removeSelectedCarsSuccess = createAction(
+    '[Container Observed] RemoveObservedCars Success',
+    props<{cars:number[]}>()
 )

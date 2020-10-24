@@ -13,6 +13,10 @@ export interface Car{
     observed?:boolean
 }
 
+export interface CarWithCount extends Car {
+    count?:number
+}
+
 export interface User{
     id:number
     username:string

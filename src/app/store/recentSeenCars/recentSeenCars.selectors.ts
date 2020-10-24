@@ -6,7 +6,7 @@ import { RecentSeenCar } from '../../interfaces'
 
 export const selectUsersRatingsState = createFeatureSelector<RecentSeenCarsState>('recentSeenCars')
  
-export const getUsers = createSelector(
+export const getRecentSeenCars = createSelector(
     selectUsersRatingsState,
     usersRecentSeenCarsReducers.selectAll
 )

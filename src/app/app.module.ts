@@ -16,29 +16,36 @@ import { TypesModule } from './store/types/types.module';
 import { BrandsModule } from './store/brands/brands.module';
 import { UsersRatingsModule } from './store/users-ratings/users-ratings.module'
 import { RecentSeenCarsModule } from './store/recentSeenCars/recentSeenCars.module'
-import { ObservedCarsModule } from './store/observedCars/observedCars.module'
-import { StatusModule } from './store/status/module.status'
+import { UserObservedCarsModule } from './store/userObservedCars/userObservedCars.module'
+import { AllObservedCarsModule } from './store/allObservedCars/allObservedCars.module'
+import { StatusModule } from './store/status/status.module'
 
 
 import { GalleryComponent } from './components/gallery/gallery.component';
-import { ConteinerGalleryComponent } from './conteiners/conteiner-gallery/conteiner-gallery.component';
+import { ContainerGalleryComponent } from './containers/container-gallery/container-gallery.component';
 import { CarCardGalleryComponent } from './components/car-card-gallery/car-card-gallery.component';
 import { NavbarComponent } from './components/navbar/navbar.component'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ShowUserRatingComponent } from './components/show-user-rating/show-user-rating.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RecentSeenCarsComponent } from './components/recent-seen-cars/recent-seen-cars.component';
+import { ContainerObservedCarsComponent } from './containers/container-observed-cars/container-observed-cars.component';
+import { ObservedCarsComponent } from './components/observed-cars/observed-cars.component';
+import { CarCardObservedComponent } from './components/car-card-observed/car-card-observed.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         HomeComponent,
         GalleryComponent,
-        ConteinerGalleryComponent,
+        ContainerGalleryComponent,
         CarCardGalleryComponent,
         NavbarComponent,
         ShowUserRatingComponent,
-        RecentSeenCarsComponent
+        RecentSeenCarsComponent,
+        ContainerObservedCarsComponent,
+        ObservedCarsComponent,
+        CarCardObservedComponent
     ],
     imports: [
         BrowserModule,
@@ -55,7 +62,8 @@ import { RecentSeenCarsComponent } from './components/recent-seen-cars/recent-se
         TypesModule,
         UsersRatingsModule,
         RecentSeenCarsModule,
-        ObservedCarsModule,
+        UserObservedCarsModule,
+        AllObservedCarsModule,
         StatusModule,
         
         FontAwesomeModule

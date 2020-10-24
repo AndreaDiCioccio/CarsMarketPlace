@@ -1,8 +1,8 @@
 import { createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-import * as ObservedCarsActions from './observedCars.actions'
+import * as ObservedCarsActions from './allObservedCars.actions'
 import { ObservedCarsState } from './models';
-import { ObservedCar } from 'src/app/interfaces';
+import { ObservedCar } from '../../interfaces';
 
 export const adapter = createEntityAdapter<ObservedCar>({})
 
@@ -10,10 +10,7 @@ export const initialObservedCarsState = adapter.getInitialState()
 
 export const observedCarsReducers = createReducer(
     initialObservedCarsState,
-    on(ObservedCarsActions.getObservedCarsSuccess, (state, action) => adapter.addAll(action.observedCars , state)),
-    on(ObservedCarsActions.setObservedCarSuccess, (state, action) => adapter.addOne(action.observed, state)),
-    on(ObservedCarsActions.setNotObservedCarSuccess, (state, action) => adapter.removeAll(state)),
-    on(ObservedCarsActions.setNotObservedCarSuccess, (state, action) => adapter.addAll(action.observedCars, state))
+    on(ObservedCarsActions.getAllObservedCarsSuccess, (state, action) => adapter.addAll(action.observedCars , state))
 );
 
 //selectAll is a method of EntitySelector Interface;

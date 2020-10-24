@@ -1,6 +1,6 @@
 import { observedCars } from './../mockData';
 import { AuthenticationService } from './authentication.service';
-import { TypeCB, UserRating, RecentSeenCar, ObservedCar } from './../interfaces';
+import { TypeCB, UserRating, RecentSeenCar, ObservedCar, User } from './../interfaces';
 import { cars, brands, types, usersRatings, recentSeenCars } from '../mockData';
 import { Car, BrandCB } from '../interfaces'
 import { Injectable } from '@angular/core';
@@ -11,7 +11,7 @@ import { mergeMap, map, distinct, toArray, tap } from 'rxjs/operators';
     providedIn: 'root'
 })
 
-export class MockService {
+export class MockService { 
 
     constructor(private authService: AuthenticationService){}
 
@@ -66,14 +66,15 @@ export class MockService {
     }
 
     getRecentSeenCars():Observable<RecentSeenCar[]>{
+        let user:User = this.authService.currentUserValue
         return of(recentSeenCars).pipe(
             map( (cars:RecentSeenCar[]) => {
-                return cars.filter( (car:RecentSeenCar) => car.observedBy == this.authService.currentUserValue.id )
+                return cars.filter( (car:RecentSeenCar) => car.observedBy == user.id )
             })
         )
     }
 
-    getObservedCars():Observable<ObservedCar[]>{
+    getUserObservedCars():Observable<ObservedCar[]>{
         return of(observedCars).pipe(
             map( (observed:ObservedCar[]) => {
                 return observed.filter( obs => obs.userId == this.authService.currentUserValue.id)
@@ -82,22 +83,38 @@ export class MockService {
     }
 
     setObservedCar(carId:any):Observable<ObservedCar>{
+        let user:User = this.authService.currentUserValue
         let newId = Math.max.apply(Math, observedCars.map( obj => obj.id) ) + 1
-        let observed:ObservedCar = {id:newId, userId:this.authService.currentUserValue.id, carId:carId.carId}
+        let observed:ObservedCar = {id:newId, userId:user.id, carId:carId.carId}
         observedCars.push(observed)
 
         return of(observed)
     }
 
     setNotObservedCar(obs:ObservedCar):Observable<ObservedCar[]>{
-        let index:number = observedCars.findIndex( obj => (obj.userId == this.authService.currentUserValue.id && obj.carId == obs.carId))
+        let user:User = this.authService.currentUserValue
+        let index:number = observedCars.findIndex( obj => (obj.userId == user.id && obj.carId == obs.carId))
         index != -1 ? observedCars.splice( index, 1) : null
 
-        return of(observedCars).pipe(
+        return of(JSON.parse(JSON.stringify(observedCars))).pipe(
             map( (observed:ObservedCar[]) => {
-                return observed.filter( obs => obs.userId == this.authService.currentUserValue.id)
+                return observed.filter( obs => obs.userId == user.id)
             })
         )
+    }
+
+    removeObservedCars(cars:number[]):Observable<number[]>{
+        let user:User = this.authService.currentUserValue
+        cars.forEach( car => {
+            let index:number
+            observedCars.findIndex( obs => obs.carId == car && obs.userId == user.id)
+        })
+
+        return of(cars)
+    }
+
+    getAllObservedCars():Observable<ObservedCar[]>{
+        return of(JSON.parse(JSON.stringify(observedCars)))
     }
 
 }

@@ -1,0 +1,32 @@
+<div class="card">
+    <div class="firstBlock">
+        <div class="containerCheckBox">
+            <input class="checkBox" type="checkbox" (change)="checkBoxClicked($event)">
+        </div>
+        <div class="image">
+            <a routerLink="/gallery/details/{{car.id}}"><img src="{{carsImagesUrl}}{{car.image1}}"></a>
+        </div>
+        <div class="details">
+            <div class="descriptionBase"><b>{{car?.brand}} {{car?.model}}</b></div>
+            <div class="descriptionPriceLabel">PRICE:</div>
+            <div *ngIf="(car.discount == 0) else discount" class="descriptionPrice">{{car?.price | currency:'EUR'}}</div>
+            <ng-template #discount>
+                <div class="noPrice">{{car?.price | currency:'EUR'}}</div>
+                <div class="descriptionPrice">{{car?.price - (car?.price / 100 * car?.discount) | currency:'EUR'}}</div>
+            </ng-template>
+            <div class="observedBy">observed by another {{car.count-1}} persons</div>
+        </div>
+    </div><!--firstBlock-->
+    <div class="blockSpace"></div>
+    <div class="secondBlock">
+        <div class="descriptionUsername">SELLERS:
+            <div><a routerLink="/userPage/{{car?.userId}}">{{car?.username}}</a></div>
+            <app-show-user-rating [rating]="rating" [username]=car.username></app-show-user-rating>
+        </div>
+        <div class="buySection">
+            <a routerLink="/buyCar/{{car?.id}}">
+                <input type="button" class="btnBuy" value="Buy" title="click to buy" >
+            </a>
+        </div>
+    </div><!--secondBlock-->
+</div><!--cardContainer-->
