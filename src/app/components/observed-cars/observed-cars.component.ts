@@ -6,20 +6,20 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
 @Component({
     selector: 'app-observed-cars',
     template: `
-    <h2>Your Observed Cars</h2>
-    <div class="container">
-        <div class="left-container">
-            <app-recent-seen-cars class="recent-seen" [recentSeenCars]="recentSeenCars"></app-recent-seen-cars>
+        <h2>Your Observed Cars</h2>
+        <div class="container">
+            <div class="left-container">
+                <app-recent-seen-cars class="recent-seen" [recentSeenCars]="recentSeenCars"></app-recent-seen-cars>
+            </div>
+            <div class="central-container">
+                <button class="btn-remove-observed-cars" (click)="removeSelectedCars(carsToDelete)">remove selected cars</button>
+                <app-card-observed-cars *ngFor="let car of observedCars"
+                    [usersRatings]="usersRatings"
+                    [car]="car"
+                    (SetObervedNotObserved)="onSetObservedNotObserved($event)">
+                </app-card-observed-cars>    
+            </div>
         </div>
-        <div class="central-container">
-            <button class="btn-remove-observed-cars" (click)="removeSelectedCars(carsToDelete)">remove selected cars</button>
-            <app-car-card-observed *ngFor="let car of observedCars"
-                [usersRatings]="usersRatings"
-                [car]="car"
-                (SetObervedNotObserved)="onSetObservedNotObserved($event)">
-            </app-car-card-observed>    
-        </div>
-    </div>
     `,
     styleUrls: ['./observed-cars.component.css']
 })

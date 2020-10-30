@@ -4,7 +4,7 @@
     font-family: 'Poppins';
 }
 
-.conteiner{
+.container{
     display: flex;
     justify-content: flex-start;
 }
@@ -13,7 +13,7 @@
     display:none;
 }
 
-.show-normal-left-conteiner{
+.show-normal-left-container{
     display: block;
     position: static;
     max-width: 150px;
@@ -22,7 +22,7 @@
     background-color: white;
 }
 
-.show-mobile-left-conteiner{
+.show-mobile-left-container{
     display: block;
     position: absolute;
     max-width: 150px;
@@ -32,7 +32,7 @@
     background-color: white;
 }
 
-.hide-left-conteiner{
+.hide-left-container{
     display: none;
 }
 
@@ -68,4 +68,11 @@
     .recent-seen{
         display: none;
     }
+
+    .left-container{
+        display: none;
+    }
 }
+
+
+

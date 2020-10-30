@@ -1,3 +1,4 @@
+import { ObservedCarsService } from './../../services/observed-cars.service';
 import { AuthenticationService } from './../../services/authentication.service';
 import { BrandCB, TypeCB, User, ObservedCar, UserRating } from './../../interfaces';
 import { Component, Input, OnInit, Output, EventEmitter, IterableDiffers, IterableDiffer, OnChanges, SimpleChanges, DoCheck, ChangeDetectorRef } from '@angular/core';
@@ -10,14 +11,14 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
     styleUrls: ['./gallery.component.css']
 })
 
-export class GalleryComponent implements OnInit, DoCheck, OnChanges{
+export class GalleryComponent implements OnInit, OnChanges{
 
     @Input() allCars:Car[]
     @Input() brands:BrandCB[]
     @Input() types:TypeCB[]
     @Input() usersRatings:UserRating[]
     @Input() recentSeenCars:Car[]
-    @Input() observedCars:ObservedCar[]
+    @Input() userObservedCars:ObservedCar[]
 
     @Output() setObservedCarAction = new EventEmitter<any>()
     @Output() setNotObservedCarAction = new EventEmitter<any>()
@@ -38,44 +39,36 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
     checkboxBrandAll:boolean = true
     checkboxTypeAll:boolean = true
 
-    leftConteinerClass:string
+    leftContainerClass:string = 'hide-left-container'
 
     faBars = faBars
 
-    constructor( private authService:AuthenticationService, private iterableDiffers: IterableDiffers){
-        this.iterableDiffer = iterableDiffers.find([]).create(null);
+    constructor( private authService:AuthenticationService, private observedCarsService:ObservedCarsService){}
+
+    ngOnInit():void{
+        
+        this.user = this.authService.currentUserValue
+        this.user ? this.observedCarsService.setObservedCars(this.allCars, this.userObservedCars) : null
+        this.initFiltersCheckBoxes()
+        this.filteredCars = this.filterCars(this.brands, this.types, this.allCars)
+
+        this.showNormalLeftContainer()
+        window.addEventListener('resize', () => this.showNormalLeftContainer())
+
     }
 
     // evocata quando ci sono cambiamenti nelle proprietà di input
     ngOnChanges(changes: SimpleChanges): void {
         // c'è bisogno di chiamare filterCars perchè oltre a filtrare le auto aggiorna l'array in visualizzazione
         //changes.allCars ? this.filterCars(this.brands, this.types) : null        
-        changes.allCars ? this.filteredCars = this.allCars : null
-    }
+        changes.allCars ? this.filteredCars = this.filterCars(this.brands, this.types, this.allCars) : null
+        if(changes.userObservedCars) 
+            this.user ? this.observedCarsService.setObservedCars(this.allCars, this.userObservedCars) : null
 
-    ngDoCheck(): void {
-        // used when observed buttons are pressed
-        let changes = this.iterableDiffer.diff(this.observedCars);
-        if (changes) {
-            this.user ? this.setObservedCars() : null
         }
 
-    }
-
-    ngOnInit():void{
-        
-        this.user = this.authService.currentUserValue
-        this.user ? this.setObservedCars() : null
-        this.initFilters()
-        this.filteredCars = this.filterCars(this.brands, this.types, this.allCars)
-
-        this.showNormalLeftConteiner()
-        window.addEventListener('resize', () => this.showNormalLeftConteiner())
-
-    }
-
     // setta le checkbox degli "all" dei filtri a false se altre checkbox risultano selezionate
-    initFilters(){
+    initFiltersCheckBoxes(){
         let filtersBrands:boolean = false
         let filtersTypes:boolean = false
         this.brands.some( brand => brand.checked) ? filtersBrands = true : null
@@ -124,8 +117,10 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
 
             this.checkboxBrandAll = false;
           
-        }else
-            brands.some( b => b.checked) ? null : this.checkboxBrandAll = true
+        }else{
+            let some = brands.some( b => b.checked)
+            some ? null : this.checkboxBrandAll = true
+        }
 
         this.filteredCars = this.filterCars(brands, types, this.allCars)
         brands = this.countBrands(brands)
@@ -175,8 +170,10 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
 
             this.checkboxTypeAll = false;
 
-        }else
-            types.some( t => t.checked) ? null : this.checkboxTypeAll = true
+        }else{
+            let some = types.some( t => t.checked)
+            some  ? null : this.checkboxTypeAll = true
+        }
 
         this.filteredCars = this.filterCars(brands, types, this.allCars)
         brands = this.countBrands(brands)
@@ -217,20 +214,7 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
 
     }
 
-    // aggiorna la proprietà "observed" di allCars
-    setObservedCars():void{
-        let allCars:Car[] = JSON.parse(JSON.stringify(this.allCars))
-        let observedCars:ObservedCar[] = [...this.observedCars]
-
-        allCars.map( car => {
-            // se la car è osservata, setta "observed" a true
-            observedCars.some( obs => obs.carId == car.id) ? car.observed = true : car.observed = false
-
-        })
-
-        this.setObservedCarsAction.emit(allCars)
-
-    }
+    
 
     // aggiorna l array per la gallery (this.filteredCars) con l'array modificato eventualmente nei filtri o nella proprietà observed (this.allCars)
     filterCars(brands:BrandCB[], types:TypeCB[], allCars:Car[]):Car[]{
@@ -279,7 +263,7 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
         
         })
         
-        return br
+        return brands
     
     }
 
@@ -300,24 +284,24 @@ export class GalleryComponent implements OnInit, DoCheck, OnChanges{
             return type
         })
 
-        return ty
+        return types
     
     }
 
-    showMobileLeftConteiner():void{
-        this.leftConteinerClass = 'show-mobile-left-conteiner'
+    showMobileLeftContainer():void{
+        this.leftContainerClass = 'show-mobile-left-container'
     }
 
-    showNormalLeftConteiner():void{
+    showNormalLeftContainer():void{
         if(window.innerWidth >= 1051){
-            this.leftConteinerClass = 'show-normal-left-conteiner'
+            this.leftContainerClass = 'show-normal-left-container'
         }else{
-            this.hideLeftContenier()
+            this.hideLeftContanier()
         }
     }
 
-    hideLeftContenier():void{
-        this.leftConteinerClass = 'hide-left-conteiner'
+    hideLeftContanier():void{
+        this.leftContainerClass = 'hide-left-container'
     }
 
     onSetObservedCar(carId:number):void{

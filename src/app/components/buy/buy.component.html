@@ -1,0 +1,22 @@
+<div class="container">
+    <div *ngIf="!isBuyed; else buyed">
+        <img src="{{carsImagesUrl}}{{car.image1}}">
+        <button class="button-buy" (click)="buy()">buy</button>
+    </div>
+    <ng-template #buyed>
+        <div class="starsForRate" *ngIf="!isRated; else rated">
+            <p>rate!</p>
+            <a (click)="rate(1)"><img src="{{greyStar}}"></a>
+            <a (click)="rate(2)"><img src="{{greyStar}}"></a>
+            <a (click)="rate(3)"><img src="{{greyStar}}"></a>
+            <a (click)="rate(4)"><img src="{{greyStar}}"></a>
+            <a (click)="rate(5)"><img src="{{greyStar}}"></a>
+        </div>
+        <ng-template #rated>
+            <p>thanks for rating!</p>
+            <div class="ratedStars" *ngFor="let rating of ratedStars">
+                <img src="{{rating}}">
+            </div>
+        </ng-template>
+    </ng-template>
+</div>

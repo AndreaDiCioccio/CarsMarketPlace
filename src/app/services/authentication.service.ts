@@ -11,7 +11,7 @@ export class AuthenticationService {
     
     private currentUserSubject: BehaviorSubject<User> = null
      
-    constructor(private router:Router, private auxiliarService:AuxiliarService) {
+    constructor(private router:Router, private auxiliarSerivice:AuxiliarService) {
 
         if(this.isExpired()){
            
@@ -54,7 +54,7 @@ export class AuthenticationService {
         localStorage.removeItem("currentUser");
         this.currentUserSubject.next(null);
 
-        this.auxiliarService.logout()
+        this.auxiliarSerivice.logout()
 
         this.router.navigateByUrl('/')
 

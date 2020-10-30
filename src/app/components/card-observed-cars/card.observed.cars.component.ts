@@ -1,14 +1,14 @@
-import { carsImagesUrl } from './../../../environments/environment';
-import { Car, Rating } from 'src/app/interfaces';
-import { UserRating, CarWithCount } from './../../interfaces';
+import { carsImagesUrl } from '../../../environments/environment';
+import { Car, Rating } from '../../interfaces';
+import { UserRating, CarWithCount } from '../../interfaces';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
-    selector: 'app-car-card-observed',
-    templateUrl: './car-card-observed.component.html',
-    styleUrls: ['./car-card-observed.component.css']
+    selector: 'app-card-observed-cars',
+    templateUrl: './card-observed-cars.component.html',
+    styleUrls: ['./card-observed-cars.component.css']
 })
-export class CarCardObservedComponent implements OnInit {
+export class CardObservedCarsComponent implements OnInit {
 
     rating:Rating
 

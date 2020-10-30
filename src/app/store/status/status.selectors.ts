@@ -32,3 +32,8 @@ export const isUsersRatingsLoaded = createSelector(
     selectStatusState,
     (status:StatusState) => status.isUsersRatingsLoaded
 )
+
+export const isBuyedCarsLoaded = createSelector(
+    selectStatusState,
+    (status:StatusState) => status.isBuyedCarsLoaded
+)

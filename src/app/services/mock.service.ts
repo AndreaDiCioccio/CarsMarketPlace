@@ -1,11 +1,11 @@
-import { observedCars } from './../mockData';
+import { observedCars, buyedCars, cars, brands, types, usersRatings, recentSeenCars } from './../mockData';
 import { AuthenticationService } from './authentication.service';
-import { TypeCB, UserRating, RecentSeenCar, ObservedCar, User } from './../interfaces';
-import { cars, brands, types, usersRatings, recentSeenCars } from '../mockData';
+import { TypeCB, UserRating, RecentSeenCar, ObservedCar, User, BuyedCar } from './../interfaces';
 import { Car, BrandCB } from '../interfaces'
 import { Injectable } from '@angular/core';
 import { of, Observable, from } from 'rxjs';
-import { mergeMap, map, distinct, toArray, tap } from 'rxjs/operators';
+import { map, } from 'rxjs/operators';
+import { identifierModuleUrl } from '@angular/compiler';
 
 @Injectable({
     providedIn: 'root'
@@ -25,6 +25,14 @@ export class MockService {
         carsWithObserved.cars.forEach( car => cars.push(car))
         let jsonCars = JSON.parse(JSON.stringify(cars))
         return of(jsonCars)
+    }
+
+    setCarWithObserved(action:any):Observable<Car>{
+        console.log('action', action)
+        let index = cars.findIndex( car => car.id == action.car.id)
+        cars[index] = action.car
+        let jsonCar = JSON.parse(JSON.stringify(action.car))
+        return of(jsonCar)
     }
 
     getBrands():Observable<BrandCB[]>{
@@ -62,7 +70,14 @@ export class MockService {
     }
 
     getUsersRatings():Observable<UserRating[]>{
-        return of(usersRatings)
+        return of(JSON.parse(JSON.stringify(usersRatings)))
+    }
+
+    addUserRating(rating:UserRating): Observable<UserRating> {
+        let id:number = usersRatings.length
+        let ratingObj:UserRating = {id:id, userId:rating.userId, value:rating.value}
+        usersRatings.push(ratingObj)
+        return of(ratingObj)
     }
 
     getRecentSeenCars():Observable<RecentSeenCar[]>{
@@ -82,18 +97,18 @@ export class MockService {
         )
     }
 
-    setObservedCar(carId:any):Observable<ObservedCar>{
+    setObservedCar(action:any):Observable<ObservedCar>{
         let user:User = this.authService.currentUserValue
         let newId = Math.max.apply(Math, observedCars.map( obj => obj.id) ) + 1
-        let observed:ObservedCar = {id:newId, userId:user.id, carId:carId.carId}
+        let observed:ObservedCar = {id:newId, userId:user.id, carId:action.carId}
         observedCars.push(observed)
 
         return of(observed)
     }
 
-    setNotObservedCar(obs:ObservedCar):Observable<ObservedCar[]>{
+    setNotObservedCar(action:any):Observable<ObservedCar[]>{
         let user:User = this.authService.currentUserValue
-        let index:number = observedCars.findIndex( obj => (obj.userId == user.id && obj.carId == obs.carId))
+        let index:number = observedCars.findIndex( obj => (obj.userId == user.id && obj.carId == action.carId))
         index != -1 ? observedCars.splice( index, 1) : null
 
         return of(JSON.parse(JSON.stringify(observedCars))).pipe(
@@ -102,7 +117,7 @@ export class MockService {
             })
         )
     }
-
+/* 
     removeObservedCars(cars:number[]):Observable<number[]>{
         let user:User = this.authService.currentUserValue
         cars.forEach( car => {
@@ -112,9 +127,22 @@ export class MockService {
 
         return of(cars)
     }
-
+ */
     getAllObservedCars():Observable<ObservedCar[]>{
         return of(JSON.parse(JSON.stringify(observedCars)))
+    }
+
+    getBuyedCars(): Observable<BuyedCar[]> {
+        return of(JSON.parse(JSON.stringify(buyedCars)))
+    }
+
+    addBuyedCar(action:any): Observable<BuyedCar> {
+        let user = this.authService.currentUserValue
+        let id = buyedCars.length || 0
+        let buyedCar = {id:id, userId:user.id, carId:action.carId}
+        buyedCars.push(buyedCar)
+
+        return of(buyedCar)
     }
 
 }

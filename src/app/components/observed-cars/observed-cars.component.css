@@ -10,3 +10,20 @@
 .central-container{
     margin:10px;
 }
+
+@media screen and (max-width: 414px){
+    
+    .left-container{
+        display: none;
+    }
+
+}
+
+@media screen and (max-width: 375px){
+    
+    .central-container{
+        margin: 0;
+        width: 100%;
+    }
+
+}

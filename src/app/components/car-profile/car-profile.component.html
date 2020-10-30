@@ -1,0 +1,25 @@
+<div class="container">
+        <div class="image"><img src="{{carsImagesUrl}}{{car.image1}}"></div>
+        <div class="image"><img src="{{carsImagesUrl}}{{car.image2}}"></div>
+        <div class="image"><img src="{{carsImagesUrl}}{{car.image3}}"></div>
+    <div class="container-description">
+        <p class="descriprion-brand-model"><b>{{car.brand}} {{car.model}}</b></p>
+        <div class="description-prices" *ngIf="(car.discount != 0) else normalPrice">
+            <div class="description-noprice">{{car?.price | currency:'EUR'}}</div>
+            <div class="description-price">{{car?.price - (car.price / 100 * car.discount) | currency:'EUR'}}</div>
+        </div>
+        <ng-template #normalPrice>
+            <div class="description-price">{{car?.price | currency:'EUR'}}</div>
+        </ng-template> 
+        <app-show-user-rating [rating]="rating" [username]="car.username"></app-show-user-rating>
+        <div *ngIf="authService.currentUserValue">
+            <button class="observe-button" *ngIf="car?.observed == true ; else isNotObserved" (click)="setNotObserved(car.id)">Observed</button>
+            <ng-template #isNotObserved>
+                <button class="observe-button" (click)="setObserved(car.id)">Observe</button>
+            </ng-template>
+        </div>
+        <div>
+            <a routerLink="/buy/{{car.id}}" ><button class="button-buy">buy</button></a>
+        </div>
+    </div>
+</div>

@@ -19,4 +19,13 @@ export class UsersRatingsEffects{
         )
     )
 
+    addRating$ = createEffect( () => 
+        this.actions$.pipe(
+            ofType(usersRatingsActions.addRating.type),
+            mergeMap( (rating:any) => this.mockService.addUserRating(rating.rating)),
+            map( (rating:UserRating) => usersRatingsActions.addRatingSuccess({rating:rating}))
+        )
+    )
+
+
 }

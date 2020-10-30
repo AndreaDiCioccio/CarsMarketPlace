@@ -1,17 +1,18 @@
-import { AuthenticationService } from './../../services/authentication.service';
-import { User, UserRating, Rating } from './../../interfaces';
+import { AuxiliarService } from './../../services/auxiliar.service';
+import { AuthenticationService } from '../../services/authentication.service';
+import { User, UserRating, Rating } from '../../interfaces';
 import { carsImagesUrl } from '../../../environments/environment';
 import { Car } from '../../interfaces';
 import { Component, OnInit, Input, OnChanges, Output, EventEmitter, IterableDiffers, IterableDiffer, DoCheck, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { timeout } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-car-card-gallery',
-    templateUrl: './car-card-gallery.component.html',
-    styleUrls: ['./car-card-gallery.component.css'],
+    selector: 'app-card-cars-gallery',
+    templateUrl: './card-cars-gallery.component.html',
+    styleUrls: ['./card-cars-gallery.component.css'],
     changeDetection:ChangeDetectionStrategy.OnPush
 })
-export class CarCardGalleryComponent implements OnInit{
+export class CardCarsGallery implements OnInit{
 
     @Input() car:Car
     @Input() usersRatings:UserRating[]
@@ -24,10 +25,10 @@ export class CarCardGalleryComponent implements OnInit{
     rating:Rating
     iterableDiffer:IterableDiffer<any>
 
-    constructor(public authService:AuthenticationService){ }
+    constructor(public authService:AuthenticationService, private auxiliarService:AuxiliarService){ }
  
     ngOnInit():void{
-        this.rating = this.calculateRating(this.usersRatings)
+        this.rating = this.auxiliarService.getRating(this.usersRatings, this.car.userId)
     }
 
 

@@ -1,7 +1,9 @@
 <div *ngIf="authService.currentUserValue">
     <div class="gallery" *ngFor="let car of cars">
         <div class="card">
-            <div><img src="{{carsImagesUrl}}{{car.image1}}" alt=""></div>
+            <div>
+                <a routerLink="/carProfile/{{car.id}}"><img src="{{carsImagesUrl}}{{car.image1}}" alt=""></a>
+            </div>
             <div>{{car.brand}} {{car.model}}</div>
             <div class="description-price" *ngIf="(car.discount != 0) else normalPrice">{{car?.price - (car.price / 100 * car.discount) | currency:'EUR'}}</div>
             <ng-template #normalPrice>

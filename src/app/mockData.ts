@@ -1,3 +1,5 @@
+export let buyedCars = []
+
 export let brands = [
     {id:0, name:'AUDI', checked:false, count:4},
     {id:1, name:'BMW', checked:false, count:7},

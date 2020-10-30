@@ -1,5 +1,5 @@
 import { getRecentSeenCars } from './../../store/recentSeenCars/recentSeenCars.actions';
-import { isUserObservedCarsLoaded } from './../../store/status/status.selectors';
+import { isUserObservedCarsLoaded, isAllCarsLoaded } from './../../store/status/status.selectors';
 import { takeUntil, tap } from 'rxjs/operators';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -10,9 +10,9 @@ import { Car, BrandCB, TypeCB, ObservedCar, RecentSeenCar, UserRating } from '..
 import * as carsActions from '../../store/cars/cars.actions'
 import * as brandsActions from '../../store/brands/brands.actions'
 import * as typesActions from '../../store/types/types.actions'
-import * as userRatingsActions from '../../store/users-ratings/users-ratings.actions'
+import * as usersRatingsActions from '../../store/users-ratings/users-ratings.actions'
 import * as recentSeenCarsActions from '../../store/recentSeenCars/recentSeenCars.actions'
-import * as observedCarsActions from '../../store/userObservedCars/userObservedCars.actions'
+import * as userObservedCarsActions from '../../store/userObservedCars/userObservedCars.actions'
 import * as statusActions from '../../store/status/status.actions'
 
 import * as carsSelectors from '../../store/cars/cars.selectors'
@@ -33,7 +33,7 @@ import { Subject, Observable } from 'rxjs';
                     [types]="types$ | async" 
                     [usersRatings]="usersRatings$ | async" 
                     [recentSeenCars]="recentSeenCars$ | async"
-                    [observedCars]="observedCars$ | async"
+                    [userObservedCars]="userObservedCars$ | async"
                     
                     (setObservedCarAction)="onSetObservedCar($event)"
                     (setNotObservedCarAction)="onSetNotObservedCar($event)"
@@ -53,13 +53,15 @@ export class ContainerGalleryComponent implements OnInit, OnDestroy{
     types$:Observable<TypeCB[]>
     usersRatings$:Observable<UserRating[]>
     recentSeenCars$:Observable<RecentSeenCar[]>
-    observedCars$:Observable<ObservedCar[]>
+    userObservedCars$:Observable<ObservedCar[]>
 
     unsubscription:Subject<boolean> = new Subject
 
     isStoreLoaded:boolean = false
+    isAllCarsLoaded:boolean = false
     isStoreRecentSeenCarsLoaded:boolean = false
     isStoreObservedCarsLoaded:boolean = false
+    isStoreUsersRatingsLoaded:boolean = false
 
     constructor( private store:Store<StoreState>, private authService:AuthenticationService){}
 
@@ -82,14 +84,25 @@ export class ContainerGalleryComponent implements OnInit, OnDestroy{
             .pipe(takeUntil(this.unsubscription))
             .subscribe( loaded => this.isStoreObservedCarsLoaded = loaded)
 
-        if(!this.isStoreLoaded){
-            !this.isStoreLoaded ? this.store.dispatch(carsActions.getAllCars()) : null
-            !this.isStoreLoaded ? this.store.dispatch(brandsActions.getBrands()) : null
-            !this.isStoreLoaded ? this.store.dispatch(typesActions.getTypes()) : null
-            !this.isStoreLoaded ? this.store.dispatch(userRatingsActions.getUsersRatings()) : null
+        this.store.pipe(select(statusSelectors.isUsersRatingsLoaded))
+            .pipe(takeUntil(this.unsubscription))
+            .subscribe( loaded => this.isStoreUsersRatingsLoaded = loaded)
 
+        if(!this.isStoreLoaded){
+            this.store.dispatch(brandsActions.getBrands())
+            this.store.dispatch(typesActions.getTypes())
+            
             this.store.dispatch(statusActions.setStoreLoaded({loaded:true}))
+        }
+
+        if(!this.isAllCarsLoaded) {
+            this.store.dispatch(carsActions.getAllCars())
             this.store.dispatch(statusActions.setAllCarsLoaded({loaded:true}))
+        }
+
+        if(!this.isStoreUsersRatingsLoaded){
+            this.store.dispatch(usersRatingsActions.getUsersRatings())
+            this.store.dispatch(statusActions.setUsersRatingsLoaded({loaded:true}))
         }
 
         if(!this.isStoreRecentSeenCarsLoaded && this.authService.currentUserValue){
@@ -98,7 +111,7 @@ export class ContainerGalleryComponent implements OnInit, OnDestroy{
         }
 
         if(!this.isStoreObservedCarsLoaded)
-            this.authService.currentUserValue ? this.store.dispatch(observedCarsActions.getUserObservedCars()) : null
+            this.authService.currentUserValue ? this.store.dispatch(userObservedCarsActions.getUserObservedCars()) : null
 
         this.allCars$ = this.store.pipe(select(carsSelectors.getAllCars))
            
@@ -110,16 +123,16 @@ export class ContainerGalleryComponent implements OnInit, OnDestroy{
 
         this.recentSeenCars$ = this.store.pipe(select(userRecentSeenCarsSelectors.getRecentSeenCars))
 
-        this.observedCars$ = this.store.pipe(select(userObservedCarsSelectors.getUsersObservedCars))
+        this.userObservedCars$ = this.store.pipe(select(userObservedCarsSelectors.getUsersObservedCars))
                         
     }
 
     onSetObservedCar(carId:number):void{
-        this.store.dispatch(observedCarsActions.setObservedCar({carId}))
+        this.store.dispatch(userObservedCarsActions.setObservedCar({carId}))
     }
 
     onSetNotObservedCar(carId:number):void{
-        this.store.dispatch(observedCarsActions.setNotObservedCar({carId}))
+        this.store.dispatch(userObservedCarsActions.setNotObservedCar({carId}))
     }
 
     onSetObservedCars(cars:Car[]):void{

@@ -34,7 +34,7 @@ export class ObservedCarsEffects{
             map( observedCars => observedCarsActions.setNotObservedCarSuccess({observedCars}))
         )
     )
-
+/* 
     removeObservedCars$ = createEffect(() => 
         this.actions$.pipe(
             ofType(observedCarsActions.removeSelectedCars.type),
@@ -42,5 +42,5 @@ export class ObservedCarsEffects{
             map( cars => observedCarsActions.removeSelectedCarsSuccess({cars}))
         )
     )
-
+ */
 }

@@ -4,10 +4,11 @@
 }
 
 .card{
-    padding: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    border: 1px solid black;
+    margin: 5px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid lightgrey;
+    box-shadow: 5px 5px 5px lightgrey;
 }
 
 .firstBlock, .secondBlock, .blockSpace, .blockSpace{
@@ -102,4 +103,60 @@ a img{
     text-decoration: none;
     text-decoration-line: Snone;
     text-decoration-style: none;
+}
+
+@media screen and (max-width: 770px){
+    
+    .card .blockSpace{
+        display: none;
+    }
+
+    .observedBy{
+        font-size: small;
+    }
+
+    .secondBlock{
+        position: relative;
+        left: 160px;
+        top:25px;
+    }
+
+    .card{
+        height: 270px;
+    }
+
+}
+
+@media screen and (max-width: 414px){
+    
+    .details{
+        width: 150px;
+    }
+    .descriptionBase{
+        font-size: 16px;
+    }
+
+    .descriptionPrice, .noPrice{
+        font-size: 18px;
+    }
+
+    .observedBy{
+        display: none;
+    }
+
+}
+
+@media screen and (max-width: 375px){
+    
+    .firstBlock, .secondBlock{
+        display: block;
+    }
+
+    .card{
+        margin: 1px;
+        padding: 1px;
+    }
+
+
+
 }

@@ -5,4 +5,5 @@ export interface StatusState{
     isObservedCarsLoaded:boolean
     isAllObservedCarsLoaded:boolean
     isUsersRatingsLoaded:boolean
+    isBuyedCarsLoaded:boolean
 }

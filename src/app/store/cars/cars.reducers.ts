@@ -13,7 +13,8 @@ export const initialCarsState = adapter.getInitialState()
 export const carsReducers = createReducer(
     initialCarsState,
     on(carsActions.getAllCarsSuccess, (state, action) => adapter.addAll(action.cars, state)),
-    on(carsActions.setCarsWithObservedSuccess, (state, action) => adapter.addAll(action.cars, state)),
+    on(carsActions.setCarsWithObservedSuccess, (state, action) => adapter.addAll(action.cars, state))
+    //on(carsActions.setCarWithObservedSuccess, (state, action) => adapter.updateOne({id:action.car.id, changes:action.car}, state))
 )
 
 //selectAll is a method of EntitySelector Interface;

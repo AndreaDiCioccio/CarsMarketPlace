@@ -8,7 +8,8 @@ const initialState: StatusState = {
     isRecentSeenCarsLoaded:false,
     isObservedCarsLoaded:false,
     isAllObservedCarsLoaded:false,
-    isUsersRatingsLoaded:false
+    isUsersRatingsLoaded:false,
+    isBuyedCarsLoaded:false
 }
 
 const userReducer = createReducer(
@@ -17,7 +18,8 @@ const userReducer = createReducer(
     on(statusActions.setRecentSeenCarsLoaded, (state, {loaded}) => ({...state, isRecentSeenCarsLoaded:loaded })),
     on(statusActions.setUserObservedCarsLoaded, (state, {loaded}) => ({...state, isObservedCarsLoaded:loaded})),
     on(statusActions.setUserObservedCarsLoaded, (state, {loaded}) => ({...state, isObservedCarsLoaded:loaded})),
-    on(statusActions.setAllObservedCarsLoaded, (state, {loaded}) => ({...state, isAllObservedCarsLoaded:loaded}))
+    on(statusActions.setAllObservedCarsLoaded, (state, {loaded}) => ({...state, isAllObservedCarsLoaded:loaded})),
+    on(statusActions.setBuyedCarsLoaded, (state, loaded) => ({...state, isBuyedCarsLoaded:loaded}))
 );
   
 export function reducer(state: StatusState | undefined, action: Action) {

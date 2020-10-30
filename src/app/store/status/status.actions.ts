@@ -53,3 +53,12 @@ export const setUsersRatingsLoaded = createAction(
     '[Container] Set UsersRatingsLoaded',
     props<{loaded:boolean}>()
 )
+
+export const getBuyedCarsLoaded = createAction(
+    '[BuyedCars] Get BuyedCarsLoaded'
+)
+
+export const setBuyedCarsLoaded = createAction(
+    '[BuyedCars] Set BuyedCarsLoaded',
+    props<{loaded:boolean}>()
+)

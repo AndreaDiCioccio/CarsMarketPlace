@@ -13,6 +13,7 @@ export const initialUsersRatingsState = adapter.getInitialState()
 export const usersRatingsReducers = createReducer(
     initialUsersRatingsState,
     on(usersRatingsActions.getUsersRatingsSuccess, (state, action) => adapter.addAll(action.usersRatings, state)),
+    on(usersRatingsActions.addRatingSuccess, (state, action) => adapter.addOne(action.rating, state))
 );
 
 export const selectAll = adapter.getSelectors().selectAll

@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+*{
+	/*box-sizing:border-box;*/
+	font-family: 'Poppins';
+}
+
+.image, .images, .container-description{
+    display: inline-block;
+}
+.image{
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid lightgrey;
+    box-shadow: 5px 5px 5px lightgrey;
+}
+
+.container-description{
+    position: relative;
+    top: -155px;
+}
+
+.description-price{
+    color: rgb(84, 177, 206);
+    font-size: large;
+}
+
+.description-noprice{
+    color: rgb(84, 177, 206);
+    text-decoration: line-through;
+}
+
+.observe-button{
+    margin-top: 5px;
+    background-color: rgb(84, 177, 206);
+    color: white;
+    border: 0;
+    border-radius: 0;
+}
+
+.button-buy{
+    margin-top: 5px;
+    background-color: rgb(250, 60, 60);
+    color: white;
+    font-weight: bold;
+    font-size: x-large;
+    border: 0;
+    border-radius: 0;
+}
+
+@media screen and (max-width: 1025px){
+    .container-description{
+        position: static;
+    }
+}
+
+@media screen and (max-width: 780px){
+    .container-description{
+        position: relative;
+    }
+}
+
+@media screen and (max-width: 415px){
+    .container-description{
+        position: static;
+    }
+}

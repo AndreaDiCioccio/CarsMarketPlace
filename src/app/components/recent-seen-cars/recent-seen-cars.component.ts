@@ -21,13 +21,7 @@ export class RecentSeenCarsComponent implements OnInit {
     ngOnInit(): void {
         this.user = this.authService.currentUserValue
         if(this.user){
-            //this.usersRecentSeenCars = this.usersRecentSeenCars.filter( user => user.id == this.user.id)
-            //let doubleArray = this.usersRecentSeenCars.map( user => user. )
-            //this.cars = doubleArray[0]
-            
-            // remove multiple cars in the array,
-            // take just one for id
-            this.cars = this.recentSeenCars.filter((v,i,a) => a.findIndex ( t => (t.id === v.id))===i)
+            this.cars = this.recentSeenCars.filter( (car, i, arr) => arr.findIndex ( el => (el.id === car.id) ) === i )
         }
     }
 

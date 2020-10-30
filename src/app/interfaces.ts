@@ -41,6 +41,12 @@ export interface ObservedCar{
     carId:number
 }
 
+export interface BuyedCar{
+    id:number
+    userId:number
+    carId:number
+}
+
 export interface BrandCB {
     id:number
     name:string
