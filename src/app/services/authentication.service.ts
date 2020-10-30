@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { users } from '../mockData'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { User } from '../interfaces'
-import * as moment from 'moment'
+import moment from 'moment'
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
