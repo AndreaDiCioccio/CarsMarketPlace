@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { Car, UserRating, ObservedCar } from 'src/app/interfaces';
+import { Car, UserRating, ObservedCar } from '../../interfaces';
 import { Store, select } from '@ngrx/store';
 import { map, take, tap } from 'rxjs/operators';
 import { ActivatedRoute, ParamMap } from '@angular/router';
