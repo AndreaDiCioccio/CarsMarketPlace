@@ -1,10 +1,7 @@
-import { getAllObservedCars } from './../../store/allObservedCars/allObservedCars.actions';
-import { setUsersRatingsLoaded } from './../../store/status/status.actions';
-import { isStoreLoaded, isRecentSeenCarsLoaded } from './../../store/status/status.selectors';
-import { takeUntil, tap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { StoreState } from 'src/app/store/models';
+import { StoreState } from '../../store/models';
 import { Subject, Observable } from 'rxjs';
 
 import * as userObservedCarsActions from '../../store/userObservedCars/userObservedCars.actions'
@@ -25,7 +22,7 @@ import * as usersRatingsSelectors from '../../store/users-ratings/users-ratings.
 import * as recentSeenCarsActions from '../../store/recentSeenCars/recentSeenCars.actions'
 import * as recentSeenCarsSelectors from '../../store/recentSeenCars/recentSeenCars.selectors'
 
-import { ObservedCar, Car, UserRating } from 'src/app/interfaces';
+import { ObservedCar, Car, UserRating } from '../../interfaces';
 
 @Component({
     selector: 'app-container-observed-cars',

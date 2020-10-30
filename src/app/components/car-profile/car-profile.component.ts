@@ -1,9 +1,8 @@
-import { observedCars } from './../../mockData';
 import { carsImagesUrl } from './../../../environments/environment';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { Car, UserRating, Rating, ObservedCar } from 'src/app/interfaces';
-import { AuxiliarService } from 'src/app/services/auxiliar.service';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Car, UserRating, Rating, ObservedCar } from '../../interfaces';
+import { AuxiliarService } from '../../services/auxiliar.service';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
     selector: 'app-car-profile',

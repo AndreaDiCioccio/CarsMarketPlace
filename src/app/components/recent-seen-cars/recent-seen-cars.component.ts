@@ -1,6 +1,6 @@
 import { AuthenticationService } from './../../services/authentication.service';
 import { Component, OnInit, Input } from '@angular/core';
-import { Car, User, RecentSeenCar } from 'src/app/interfaces';
+import { Car, User, RecentSeenCar } from '../../interfaces';
 import { carsImagesUrl } from '../../../environments/environment'
 
 @Component({

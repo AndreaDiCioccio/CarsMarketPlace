@@ -4,6 +4,7 @@ import { Car, UserRating, ObservedCar } from 'src/app/interfaces';
 import { Store, select } from '@ngrx/store';
 import { map, take, tap } from 'rxjs/operators';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { AuthenticationService } from '../../services/authentication.service'
 
 import * as allCarsSelectors from '../../store/cars/cars.selectors'
 import * as allCarsActions from '../../store/cars/cars.actions'
@@ -16,7 +17,6 @@ import * as usersRatingsActions from '../../store/users-ratings/users-ratings.ac
 
 import * as userObservedCarsActions from '../../store/userObservedCars/userObservedCars.actions'
 import * as userObservedCarsSelectors from '../../store/userObservedCars/userObservedCars.selectors'
-import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
     selector: 'app-container-car-profile',

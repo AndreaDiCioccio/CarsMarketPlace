@@ -1,7 +1,7 @@
 import { UserRating } from './../../interfaces';
 import { carsImagesUrl, imagesUrl } from './../../../environments/environment';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Car } from 'src/app/interfaces';
+import { Car } from '../../interfaces';
 
 @Component({
     selector: 'app-buy',

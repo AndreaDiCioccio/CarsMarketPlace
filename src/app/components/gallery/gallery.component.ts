@@ -2,7 +2,7 @@ import { ObservedCarsService } from './../../services/observed-cars.service';
 import { AuthenticationService } from './../../services/authentication.service';
 import { BrandCB, TypeCB, User, ObservedCar, UserRating } from './../../interfaces';
 import { Component, Input, OnInit, Output, EventEmitter, IterableDiffers, IterableDiffer, OnChanges, SimpleChanges, DoCheck, ChangeDetectorRef } from '@angular/core';
-import { Car } from 'src/app/interfaces';
+import { Car } from '../../interfaces';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
