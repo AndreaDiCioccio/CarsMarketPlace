@@ -3,6 +3,7 @@ import { takeUntil, map, tap } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { AuthenticationService } from '../../services/authentication.service';
 
 import * as buyedCarsActions from '../../store/buyedCars/buyedCars.actions'
 import * as buyedCarsSelectors from '../../store/buyedCars/buyedCars.selectors'
@@ -15,8 +16,6 @@ import * as allCarsSelectors from '../../store/cars/cars.selectors'
 
 import * as recentSeenCarsActions from '../../store/recentSeenCars/recentSeenCars.actions'
 import * as recentSeenCarsSelectors from '../../store/recentSeenCars/recentSeenCars.selectors'
-
-import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
     selector: 'app-container-buyed-cars',
